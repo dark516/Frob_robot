@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  robot-user:
+    build: .
+    container_name: ros
+    ports:
+      - 11311:11311
+    network_mode: host
+    extra_hosts:
+        - "robot:192.168.81.43"
+        - "robot-user:192.168.1.3"
+    environment:
+        - DISPLAY=${DISPLAY}
+    volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+    stdin_open: true
+    tty: true
+    hostname: robot-user
+    privileged: true
+
+volumes:
+    tmux:
