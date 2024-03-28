@@ -2,22 +2,26 @@ version: "3"
 
 services:
   robot-user:
-    build: .
+    build:
+        context: .
+        dockerfile: frob.dockerfile
     container_name: ros
     ports:
       - 11311:11311
     network_mode: host
     extra_hosts:
-        - "robot:192.168.81.43"
-        - "robot-user:192.168.1.3"
+        - robot:192.168.125.68
+        - robot-user:192.168.191.191
     environment:
         - DISPLAY=${DISPLAY}
+        - ROS_MASTER_URI=http://robot-user:11311
+        - ROS_HOSTNAME=robot-user
+        - ROS_IP=192.168.125.68
     volumes:
         - /tmp/.X11-unix:/tmp/.X11-unix
     stdin_open: true
     tty: true
     hostname: robot-user
-    privileged: true
 
 volumes:
-    tmux:
+  x11:

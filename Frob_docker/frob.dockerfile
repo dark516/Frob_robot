@@ -1,10 +1,10 @@
-FROM osrf/ros:noetic-desktop-full
+FROM dark516/ros
 MAINTAINER Alexander Kulagin sashakulagin2007@gmail.com
 
 RUN apt-get update
 
 WORKDIR /root/ros
-RUN apt update && apt install -y tmux wget curl gnupg git \
+RUN apt update && apt install -y -q --no-install-recommends tmux wget curl gnupg git \
 								python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential \
 								iproute2 iputils-ping
 RUN mkdir -p ~/.config/tmux src && \
@@ -27,5 +27,7 @@ RUN cd WiringPi && ./build
 WORKDIR /root/ros
 RUN bash -c ". /opt/ros/noetic/setup.bash && catkin_make"
 RUN apt-get install ros-noetic-pid
+
+RUN echo "source ~/ros/devel/setup.bash" >> ~/.bashrc
 
 ENTRYPOINT ["tmux"]
