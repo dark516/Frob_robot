@@ -1,6 +1,6 @@
 
-#ifndef ABOT_HARDWARE_INTERFACE_HPP_
-#define ABOT_HARDWARE_INTERFACE_HPP_
+#ifndef FROB_HARDWARE_INTERFACE_HPP_
+#define FROB_HARDWARE_INTERFACE_HPP_
 
 #include <boost/assign/list_of.hpp>
 #include <sstream>
@@ -14,9 +14,9 @@
 #include <ros/console.h>
 #include <ros/ros.h>
 
-class AbotHardwareInterface : public hardware_interface::RobotHW {
+class FrobHardwareInterface : public hardware_interface::RobotHW {
 public:
-	AbotHardwareInterface(ros::NodeHandle node, ros::NodeHandle private_node, double target_max_wheel_angular_speed);
+	FrobHardwareInterface(ros::NodeHandle node, ros::NodeHandle private_node, double target_max_wheel_angular_speed);
 
 	void updateJointsFromHardware(const ros::Duration& period);
 	void writeCommandsToHardware();
@@ -57,7 +57,7 @@ private:
 	void limitDifferentialSpeed(double& diff_speed_left_side, double& diff_speed_right_side);
 };
 
-AbotHardwareInterface::AbotHardwareInterface(ros::NodeHandle node, ros::NodeHandle private_node, double target_max_wheel_angular_speed)
+FrobHardwareInterface::FrobHardwareInterface(ros::NodeHandle node, ros::NodeHandle private_node, double target_max_wheel_angular_speed)
 	: _node(node)
 	, _private_node(private_node)
 	, _max_wheel_angular_speed(target_max_wheel_angular_speed) {
@@ -65,11 +65,11 @@ AbotHardwareInterface::AbotHardwareInterface(ros::NodeHandle node, ros::NodeHand
 
 	_left_wheel_vel_pub = _node.advertise<std_msgs::Float64>("/frob/left_wheel/target_velocity", 1);
 	_right_wheel_vel_pub = _node.advertise<std_msgs::Float64>("/frob/right_wheel/target_velocity", 1);
-	_left_wheel_angle_sub = _node.subscribe("frob/left_wheel/angle", 1, &AbotHardwareInterface::leftWheelAngleCallback, this);
-	_right_wheel_angle_sub = _node.subscribe("frob/right_wheel/angle", 1, &AbotHardwareInterface::rightWheelAngleCallback, this);
+	_left_wheel_angle_sub = _node.subscribe("frob/left_wheel/angle", 1, &FrobHardwareInterface::leftWheelAngleCallback, this);
+	_right_wheel_angle_sub = _node.subscribe("frob/right_wheel/angle", 1, &FrobHardwareInterface::rightWheelAngleCallback, this);
 }
 
-void AbotHardwareInterface::writeCommandsToHardware() {
+void FrobHardwareInterface::writeCommandsToHardware() {
 	double diff_angle_speed_left = _joints[0].velocity_command;
 	double diff_angle_speed_right = _joints[1].velocity_command;
 
@@ -85,7 +85,7 @@ void AbotHardwareInterface::writeCommandsToHardware() {
 	_right_wheel_vel_pub.publish(right_wheel_vel_msg);
 }
 
-void AbotHardwareInterface::updateJointsFromHardware(const ros::Duration& period) {
+void FrobHardwareInterface::updateJointsFromHardware(const ros::Duration& period) {
 	double delta_left_wheel = _left_wheel_angle - _joints[0].position - _joints[0].position_offset;
 	double delta_right_wheel = _right_wheel_angle - _joints[1].position - _joints[1].position_offset;
 
@@ -104,7 +104,7 @@ void AbotHardwareInterface::updateJointsFromHardware(const ros::Duration& period
 	}
 }
 
-void AbotHardwareInterface::registerControlInterfaces() {
+void FrobHardwareInterface::registerControlInterfaces() {
 	ros::V_string joint_names = boost::assign::list_of("left_wheel_to_base")("right_wheel_to_base");
 
 	for (unsigned int i = 0; i < joint_names.size(); i++) {
@@ -118,15 +118,15 @@ void AbotHardwareInterface::registerControlInterfaces() {
 	registerInterface(&_velocity_joint_interface);
 }
 
-void AbotHardwareInterface::leftWheelAngleCallback(const std_msgs::Float64& msg) {
+void FrobHardwareInterface::leftWheelAngleCallback(const std_msgs::Float64& msg) {
 	_left_wheel_angle = msg.data;
 }
 
-void AbotHardwareInterface::rightWheelAngleCallback(const std_msgs::Float64& msg) {
+void FrobHardwareInterface::rightWheelAngleCallback(const std_msgs::Float64& msg) {
 	_right_wheel_angle = msg.data;
 }
 
-void AbotHardwareInterface::limitDifferentialSpeed(double& diff_speed_left_side, double& diff_speed_right_side) {
+void FrobHardwareInterface::limitDifferentialSpeed(double& diff_speed_left_side, double& diff_speed_right_side) {
 	double large_speed = std::max(std::abs(diff_speed_left_side), std::abs(diff_speed_right_side));
 	if (large_speed > _max_wheel_angular_speed) {
 		diff_speed_left_side *= _max_wheel_angular_speed / large_speed;
@@ -134,4 +134,4 @@ void AbotHardwareInterface::limitDifferentialSpeed(double& diff_speed_left_side,
 	}
 }
 
-#endif // ABOT_HARDWARE_INTERFACE_HPP_
+#endif // FROB_HARDWARE_INTERFACE_HPP_
