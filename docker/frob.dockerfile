@@ -15,9 +15,10 @@ RUN bash -c ". /opt/ros/noetic/setup.bash && catkin_make"
 RUN echo "source ~/ros/devel/setup.bash" >> ~/.bashrc
 
 WORKDIR /root/ros
-RUN git clone https://github.com/dark516/ros-robot /tmp && \
-	mv /tmp/ros/* src && \
-	rm -rf /tmp/ros
+COPY ../../src/ros/. ./src/
+# RUN git clone https://github.com/dark516/ros-robot /tmp && \
+# 	mv /tmp/ros/* src && \
+# 	rm -rf /tmp/ros
 RUN apt install -y ros-noetic-gmapping ros-noetic-joy
 
 WORKDIR /root

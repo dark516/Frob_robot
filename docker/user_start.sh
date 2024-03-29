@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ip=`ip addr show wlan0 | grep inet | head -n 1 | awk '{print $2}' | cut -d "/" -f 1 `
 foo=`grep "\- robot-user:" user-compose.yaml | cut -d ":" -f 2 | tr -d "\r"`
 

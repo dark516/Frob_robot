@@ -3,8 +3,8 @@ version: "3"
 services:
   robot-user:
     build:
-        context: .
-        dockerfile: frob.dockerfile
+        context: ..
+        dockerfile: docker/frob.dockerfile
     container_name: ros
     ports:
       - 11311:11311
@@ -13,9 +13,9 @@ services:
         - robot:192.168.191.191
         - robot-user:192.168.125.68
     environment:
-        - ROS_MASTER_URI=http://robot-user:11311
-        - ROS_HOSTNAME=robot
-        - ROS_IP=192.168.125.68
+      - ROS_MASTER_URI=http://robot-user:11311
+      - ROS_HOSTNAME=robot
+      - ROS_IP=192.168.125.68
     stdin_open: true
     tty: true
     hostname: robot
