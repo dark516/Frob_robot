@@ -1,0 +1,8 @@
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro '$(find frob_description)/urdf/frob.xacro' --inorder"/>
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen" />
+
+	<include file="$(find frob_base)/launch/frob_base.launch" />
+	<include file="$(find frob_control)/launch/frob_control.launch" />
+	<include file="$(find frob_driver)/launch/frob_drivers.launch" />
+</launch>

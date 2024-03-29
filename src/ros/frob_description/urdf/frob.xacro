@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="frob"
+	xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:property name="clearance" value="0" />
+	<xacro:property name="wheel_radius" value="0.0344"/> 
+	<xacro:property name="wheel_separation" value="0.152"/>
+	<xacro:property name="wheel_width" value="0.026"/>
+	<xacro:property name="PI" value="3.1415926"/>
+	
+		<xacro:include filename="$(find frob_description)/urdf/frob_matherials.xacro" />
+
+	<link name="base_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<sphere radius="0.001" />
+			</geometry>
+		</visual>
+	</link>
+
+	<link name="base_footprint">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<cylinder length="0.001" radius="0.150" />
+			</geometry>
+			<material name="Blue" />
+		</visual>
+	</link>
+
+	<link name="robot_base">
+		<inertial>
+			<origin xyz="-0.017258 -0.00044491 0.079113" rpy="0 0 0"/>
+			<mass value="0.71798"/>
+			<inertia ixx="0.00077488" ixy="-3.248E-06" ixz="-9.2329E-06" iyy="0.00075836" iyz="2.2456E-06" izz="0.0014158"/>
+		</inertial>
+
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_base.STL" />
+			</geometry>
+			<material name="White" />
+		</visual>
+
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_base.STL" />
+			</geometry>
+		</collision>
+	</link>
+
+
+	<joint name="base_link_to_frob_base" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="robot_base" />
+	</joint>
+
+	<joint name="base_footprint_to_base_link" type="fixed">
+		<origin xyz="0 0 ${clearance}" rpy="0 0 0" />
+		<parent link="base_footprint" />
+		<child link="base_link" />
+	</joint>
+
+	<xacro:include filename="$(find frob_description)/urdf/frob_left_wheel.xacro" />
+	<xacro:include filename="$(find frob_description)/urdf/frob_right_wheel.xacro" />
+	<xacro:include filename="$(find frob_description)/urdf/frob_caster_wheel.xacro" />
+	<xacro:include filename="$(find frob_description)/urdf/frob_sensors.xacro" />
+</robot>

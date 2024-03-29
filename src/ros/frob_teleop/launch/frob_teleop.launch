@@ -1,0 +1,16 @@
+<launch>
+	<arg name="addr" default="" />
+	<arg name="use_standard_msgs" default="true" />
+	<arg name="autorepeat_rate" default="50" if="$(arg use_standard_msgs)" />
+	<node pkg="ds4_driver" type="ds4_driver_node.py" name="ds4_driver" output="screen" >
+		<param name="device_addr" value="$(arg addr)" />
+		<param name="use_standard_msgs" value="$(arg use_standard_msgs)" />
+		<param name="autorepeat_rate" value="$(arg autorepeat_rate)" if="$(arg use_standard_msgs)" />
+		<param name="deadzone" value="0.1" />
+	</node>
+
+	<node pkg="frob_teleop" type="frob_teleop" name="frob_teleop" >
+		<param name="linear_speed_scale" type="double" value="0.20"/> 
+		<param name="angular_speed_scale" type="double" value="1.57"/>
+	</node>
+</launch>

@@ -1,0 +1,15 @@
+global_frame: map
+
+rolling_window: false
+track_unknown_space: true
+
+update_frequency: 10.0
+publish_frequency: 10.0
+transform_tolerance: 0.5
+
+cost_scaling_factor: 10.0
+
+plugins:
+  - {name: static,                  type: "costmap_2d::StaticLayer"}
+  - {name: fake_walls,              type: "costmap_2d::StaticLayer"}
+  - {name: inflation,               type: "costmap_2d::InflationLayer"}

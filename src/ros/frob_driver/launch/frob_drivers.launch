@@ -1,0 +1,6 @@
+<launch>
+	<node name="encoders" pkg="frob_driver" type="encoders" output="screen" />
+	<node name="dc_motors" pkg="frob_driver" type="dc_motors" output="screen" />
+	<include file="$(find frob_driver)/launch/frob_pid.launch" />
+	<include file="$(find frob_driver)/launch/frob_lidar.launch" />
+</launch>

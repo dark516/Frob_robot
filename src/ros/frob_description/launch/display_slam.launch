@@ -1,0 +1,9 @@
+<launch>
+	<arg name="rvizconfig" default="$(find frob_description)/rviz/frob_slam.rviz" />
+	<arg name="model" default="$(find frob_description)/urdf/frob.xacro" />
+	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+	
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="false" output="screen"/>
+	
+	<include file="$(find frob_slam)/launch/frob_slam.launch" />
+</launch>

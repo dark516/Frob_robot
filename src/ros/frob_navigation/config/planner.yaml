@@ -1,0 +1,56 @@
+# Move base
+controller_frequency: 10.0
+controller_patience: 1.0
+
+planner_frequency: 10.0
+planner_patience: 5.0
+
+oscillation_timeout: 0.0
+oscillation_distance: 0.2
+
+# Local planner
+DWAPlannerROS:
+  # Robot configuration parameters DWA
+  acc_lim_x: 1.0
+  acc_lim_y: 0.0
+  acc_lim_theta: 5.0
+
+  max_vel_trans: 0.8
+  min_vel_trans: 0.2
+
+  max_vel_x: 0.4
+  min_vel_x: -0.4
+
+  max_vel_y: 0.0
+  min_vel_y: 0.0
+
+  max_vel_theta: 1.57
+  min_vel_theta: 0.01
+
+  # Robot configuration parameters Base local
+  min_in_place_vel_theta: 0.01
+  escape_vel: -0.2
+
+  # Goal Tolerance Parameters
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.3
+
+  # Forward Simulation Parameters
+  sim_time: 1.2
+  vx_samples: 20
+  vy_samples: 0
+  vth_samples: 40
+  # ! Forward Simulation Parameters Base local
+  angular_sim_granularity: 0.17
+
+  # Trajectory Scoring Parameters
+  path_distance_bias: 32.0
+  goal_distance_bias: 20.0
+  occdist_scale: 0.02
+  forward_point_distance: 0.325
+  stop_time_buffer: 0.2
+  scaling_speed: 0.25
+  max_scaling_factor: 0.2
+
+  # Oscillation Prevention Parameters
+  oscillation_reset_dist: 0.05
