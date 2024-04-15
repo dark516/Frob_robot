@@ -5,17 +5,18 @@ services:
     build:
         context: ..
         dockerfile: docker/frob.dockerfile
+    privileged: true
     container_name: ros
     ports:
       - 11311:11311
     network_mode: host
     extra_hosts:
-        - robot:192.168.191.191
-        - robot-user:192.168.125.68
+        - robot:192.168.129.29
+        - robot-user:192.168.129.190
     environment:
       - ROS_MASTER_URI=http://robot-user:11311
       - ROS_HOSTNAME=robot
-      - ROS_IP=192.168.125.68
+      - ROS_IP=192.168.129.29
     stdin_open: true
     tty: true
     hostname: robot
