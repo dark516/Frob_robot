@@ -14,7 +14,7 @@ RUN mkdir -p ~/.config/tmux src && \
 
 
 WORKDIR /root/ros_ws
-#COPY ../../src/ros/. ./src/
+COPY ../../src/ros/. ./src/
 # RUN git clone https://github.com/dark516/ros-robot /tmp && \
 # 	mv /tmp/ros/* src && \
 # 	rm -rf /tmp/ros
