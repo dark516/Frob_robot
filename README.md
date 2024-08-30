@@ -4,18 +4,15 @@
 
 ![Frob Logo](https://via.placeholder.com/150)  <!-- Add logo -->
 
-**Frob** is an open mobile robot created to popularize robotics and ROS training.
+**Frob** is an open—source mobile robot created to promote robotics and [ROS](https://www.ros.org/) training. It is designed for enthusiasts, students and teachers exploring the world of robotics. Whether you are a beginner, or an experienced developer, Frob provides a versatile platform for addressing a wide range of learning challenges.
 
 [![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=flat-square&logo=github)](https://github.com/dark516/Frob_robot/wiki)
 [![Telegram](https://img.shields.io/badge/Telegram-Community-blue?style=flat-square&logo=telegram)](https://t.me/FrobCommunity)
-[![License](https://img.shields.io/github/license/yourusername/Frob?style=flat-square)](https://github.com/dark516/Frob_robot/blob/main/LICENSE)
-[![Issues](https://img.shields.io/github/issues/yourusername/Frob?style=flat-square)](https://github.com/dark516/Frob_robot/issues)
+[![License](https://img.shields.io/github/license/dark516/Frob_robot?style=flat-square)](https://github.com/dark516/Frob_robot/blob/main/LICENSE)
+[![Issues](https://img.shields.io/github/issues/dark516/Frob_robot?style=flat-square)](https://github.com/dark516/Frob_robot/issues)
 
 ---
-
-## Introduction
-
-Frob is designed for enthusiasts, students, and educators to explore the world of robotics. Whether you're a beginner looking to learn the basics of ROS or a seasoned developer, Frob provides a versatile platform for a wide range of robotics applications.
+</div>
 
 ## Features
 
@@ -34,4 +31,4 @@ Frob is designed for enthusiasts, students, and educators to explore the world o
 - **[Roadmap](./ROADMAP.md)**: Check out our future plans and upcoming features.
 - **[Contributing](./CONTRIBUTING.md)**: Learn how to contribute to Frob.
 
-</div>
+
