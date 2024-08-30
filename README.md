@@ -8,7 +8,7 @@
 
 [![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=flat-square&logo=github)](https://github.com/yourusername/Frob/wiki)
 [![Telegram](https://img.shields.io/badge/Telegram-Community-blue?style=flat-square&logo=telegram)](https://t.me/FrobCommunity)
-[![License](https://img.shields.io/github/license/yourusername/Frob?style=flat-square)](https://github.com/dark516/Frob_robot/LICENSE)
+[![License](https://img.shields.io/github/license/yourusername/Frob?style=flat-square)](https://github.com/dark516/Frob_robot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/yourusername/Frob?style=flat-square)](https://github.com/dark516/Frob/issues)
 
 ---
