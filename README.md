@@ -59,17 +59,6 @@ Your participation can help shape the future of Frob. We look forward to your id
 ## License
 
 Frob is licensed under the [Apache License 2.0](./LICENSE).
-
-### Key Points of the Apache License 2.0:
-
-- **Permissions**: You are free to use, reproduce, modify, distribute, and sublicense the Software.
-- **Conditions**: 
-  - You must include a copy of the license in any distribution of the Software.
-  - You may not use the trade names, trademarks, or other identifiers of the project without proper permission.
-- **Limitations**:
-  - The Software is provided "as is", without warranty of any kind.
-  - You cannot hold the authors liable for any issues arising from the use of the Software.
-
 For a detailed understanding of your rights and responsibilities, please refer to the [full license text](./LICENSE).
 
 
