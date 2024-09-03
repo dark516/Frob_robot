@@ -23,7 +23,6 @@
 - [Contribution Guidelines](#contribution-guidelines)
 - [Community](#community)
 - [License](#license)
-- [Contact](#contact)
 
 ---
 
@@ -60,12 +59,3 @@ Your participation can help shape the future of Frob. We look forward to your id
 
 Frob is licensed under the [Apache License 2.0](./LICENSE).
 For a detailed understanding of your rights and responsibilities, please refer to the [full license text](./LICENSE).
-
-
-## Contact
-
-If you have any questions, feedback, or need support, feel free to reach out:
-
-- **Email**: [sashakulagin2007@gmail.com](mailto:sashakulagin2007@gmail.com)
-- **GitHub Profile**: [@dark516](https://github.com/dark516)
-- **Telegram**: [@dark5160](https://t.me/dark5160)
