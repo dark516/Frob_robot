@@ -113,6 +113,26 @@ void setup() {
 
 void loop() {
   static unsigned long freq = millis();
+
+  if (Serial.available() >= 4) {  // Ожидаем 4 байта данных (2 числа по 2 байта)
+    int left_motor_speed = 0;
+    int right_motor_speed = 0;
+    
+    byte buffer[4];
+
+    // Читаем 4 байта
+    for (int i = 0; i < 4; i++) {
+      buffer[i] = Serial.read();
+    }
+
+    // Преобразуем байты обратно в два числа (тип short int)
+    left_motor_speed = (short)((buffer[1] << 8) | buffer[0]);
+    right_motor_speed = (short)((buffer[3] << 8) | buffer[2]);
+    
+    left_regulator.set_delta(left_motor_speed);
+    right_regulator.set_delta(right_motor_speed);
+  }
+
   if (millis() - freq >= 1000 * DT) {
     freq = millis();
     left_regulator.update(); //Не трогать.
@@ -120,12 +140,12 @@ void loop() {
 
 
     //Вывод для отладки в формате: реальная_скорость_левого_мотора установочная_скорость_левого_мотора    реальная_скорость_правого_мотора установочная_скорость_правого_мотора
-    PT(left_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
-    PT(left_regulator.delta); //Отправка установочной скорости левого мотора
-    Serial.print("/t");
-    PT(right_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
-    PT(right_regulator.delta); //Отправка установочной скорости левого мотора
-    Serial.println();
+//    PT(left_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
+//    PT(left_regulator.delta); //Отправка установочной скорости левого мотора
+//    Serial.print("/t");
+//    PT(right_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
+//    PT(right_regulator.delta); //Отправка установочной скорости левого мотора
+//    Serial.println();
   }
 
   
