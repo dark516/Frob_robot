@@ -105,7 +105,6 @@ void __right_motor_enc() {
 
 
 void setup() {
-  //left_regulator.set_delta(2);
   Serial.begin(9600);
 }
 

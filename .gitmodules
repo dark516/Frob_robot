@@ -1,0 +1,3 @@
+[submodule "ros2/src/ros2_ws/src/ros2_arduino_bridge"]
+	path = ros2/src/ros2_ws/src/ros2_arduino_bridge
+	url = https://github.com/dark516/ros2_arduino_bridge

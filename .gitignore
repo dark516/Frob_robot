@@ -7,9 +7,9 @@ ros1/src/ros/**/devel/
 ros1/src/ros/**/install/
 
 # Ignore build artifacts and other unnecessary files from ROS2 packages
-ros2/src/ros/**/build/
-ros2/src/ros/**/install/
-ros2/src/ros/**/log/
+/**/build
+/**/install
+/**/log
 
 # Ignore temporary files and directories
 *.swp
