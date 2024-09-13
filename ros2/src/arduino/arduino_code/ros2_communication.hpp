@@ -41,8 +41,9 @@ void set_motors(){
 }
 
 void get_data(){
-  Data ret{left_regulator.encoder.calc_delta(), right_regulator.encoder.calc_delta()};
-  serial_send(ret);  
+  wait_bytes(sizeof(int8_t));
+  Data ret{left_regulator.encoder.speed, right_regulator.encoder.speed};
+  Serial.write((uint8_t*)&ret, sizeof(ret));  
 }
 
 void command_spin(){

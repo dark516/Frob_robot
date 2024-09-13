@@ -30,6 +30,7 @@ void __right_motor_enc() {
 void setup() {
 //  left_regulator.set_delta(5);
 //  right_regulator.set_delta(5);
+
   Serial.begin(115200);
 }
 
@@ -41,13 +42,12 @@ void loop() {
   static unsigned long freq = millis();
   command_spin();
   
-
+  
 
   if (millis() - freq >= 1000 * DT) {
     freq = millis();
     left_regulator.update(); //Не трогать.
     right_regulator.update(); //Не трогать.
-
 
     //Вывод для отладки в формате: реальная_скорость_левого_мотора установочная_скорость_левого_мотора    реальная_скорость_правого_мотора установочная_скорость_правого_мотора
 //    PT(left_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора

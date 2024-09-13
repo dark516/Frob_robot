@@ -19,6 +19,7 @@ struct PID {
 };
 
 struct Encoder {
+  int speed = 0;
   volatile long ticks = 0, prev_ticks = 0;
   byte pin_a, pin_b;
   
@@ -34,9 +35,8 @@ struct Encoder {
   }
 
   int calc_delta() {
-    int ret = ticks - prev_ticks;
-    prev_ticks = ticks;
-    return ret;
+    speed = ticks - prev_ticks;
+    prev_ticks = ticks; 
   }
   
 };
@@ -71,10 +71,15 @@ struct Regulator {
   void update() {
     next += delta;
     motor.set_pwmdir(pid.calc(next - encoder.ticks));
+    encoder.calc_delta();
   }
 
   void set_delta(int new_delta) {
     delta = constrain(new_delta, -MAX_DELTA, MAX_DELTA);
+    if(new_delta == 0) {
+      next = encoder.ticks;
+      motor.set_pwmdir(0);
+    }
   }
     
 };
