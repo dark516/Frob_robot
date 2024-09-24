@@ -1,7 +1,0 @@
-<launch>
-	<arg name="rvizconfig" default="$(find frob_description)/rviz/frob_movement.rviz" />
-	<arg name="model" default="$(find frob_description)/urdf/frob.xacro" />
-	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="false"/>
-</launch>

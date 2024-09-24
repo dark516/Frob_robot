@@ -1,5 +1,0 @@
-<launch>
-	<rosparam file="$(find frob_control)/config/frob_controllers.yaml" command="load"/>
-	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
-		args="joint_state_controller mobile_frob"></node>
-</launch>
