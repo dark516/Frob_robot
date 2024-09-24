@@ -14,6 +14,7 @@ struct PID {
     integral += error * DT * ki;
     integral = constrain(integral, -max_i, max_i);
     float diff = (error - old_error) * kd / DT;
+    old_error = error;
     return error * kp + integral + diff;
   }
 };
