@@ -10,9 +10,9 @@ class ViewCompressedImage(Node):
     def __init__(self):
         super().__init__('pi_image_compressed_viewer')
         self.bridge = CvBridge()
-        self.create_subscription(CompressedImage, 
-                                 '/camera/image/compressed', 
-                                 self.image_callback, 
+        self.create_subscription(CompressedImage,
+                                 '/camera/image/compressed',
+                                 self.image_callback,
                                  10)
 
     def image_callback(self, msg):

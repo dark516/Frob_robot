@@ -14,8 +14,8 @@ class CompressedImagePublisher(Node):
         self.timer = self.create_timer(time_in_seconds, self.frame_publishing_callback)
 
         self.cap = cv2.VideoCapture(0, cv2.CAP_V4L)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 720)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
         self.get_logger().info('Publishing compressed image...')
 
     def frame_publishing_callback(self):

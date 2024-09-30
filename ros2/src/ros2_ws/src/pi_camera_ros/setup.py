@@ -17,7 +17,9 @@ setup(
     maintainer_email='rpapallas@gmail.com',
     description='Simple ROS2 package to publish PI camera frames.',
     license='Apache License 2.0',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'publish_compressed = pi_camera.publish_compressed:main',
