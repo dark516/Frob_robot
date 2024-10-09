@@ -28,8 +28,8 @@ void __right_motor_enc() {
 }
 
 void setup() {
-//  left_regulator.set_delta(5);
-//  right_regulator.set_delta(5);
+  //left_regulator.set_delta(1);
+  //right_regulator.set_delta(1);
 
   Serial.begin(115200);
 }
@@ -50,10 +50,10 @@ void loop() {
     right_regulator.update(); //Не трогать.
 
     //Вывод для отладки в формате: реальная_скорость_левого_мотора установочная_скорость_левого_мотора    реальная_скорость_правого_мотора установочная_скорость_правого_мотора
-//    PT(left_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
+//    PT(left_regulator.encoder.speed); //Отправка реальной скорости левого мотора
 //    PT(left_regulator.delta); //Отправка установочной скорости левого мотора
 //    Serial.print("\t");
-//    PT(right_regulator.encoder.calc_delta()); //Отправка реальной скорости левого мотора
+//    PT(right_regulator.encoder.speed); //Отправка реальной скорости левого мотора
 //    PT(right_regulator.delta); //Отправка установочной скорости левого мотора
 //    Serial.println();
   }

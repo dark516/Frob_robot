@@ -72,7 +72,7 @@ struct Regulator {
   void update() {
     next += delta;
     motor.set_pwmdir(pid.calc(next - encoder.ticks));
-    encoder.calc_delta();
+    //encoder.calc_delta();
   }
 
   void set_delta(int new_delta) {

@@ -12,8 +12,8 @@ enum Commands : uint8_t {
 };
 
 struct Data {
-  int8_t left_speed;
-  int8_t right_speed;
+  int16_t left_encoder_delta;
+  int16_t right_encoder_delta;
 };
 
 template <typename T> void serial_read(T& dest) {
@@ -42,6 +42,8 @@ void set_motors(){
 
 void get_data(){
   wait_bytes(sizeof(int8_t));
+  left_regulator.encoder.calc_delta();
+  right_regulator.encoder.calc_delta();
   Data ret{left_regulator.encoder.speed, right_regulator.encoder.speed};
   Serial.write((uint8_t*)&ret, sizeof(ret));  
 }
