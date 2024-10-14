@@ -1,11 +1,11 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
-package_name = 'frob_odometry'
+package_name = 'frob_control'
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name],
+    packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
@@ -15,14 +15,17 @@ setup(
     zip_safe=True,
     maintainer='Alex Kulagin',
     maintainer_email='sashakulagin2007@gmail.com',
-    description='Package for odometry publishing using encoder data',
+    description='Frob control package',
     license='Apache2',
     extras_require={
         'test': ['pytest'],
     },
     entry_points={
         'console_scripts': [
-            'odometry_publisher = frob_odometry.odometry:main',
+            'turn_server = frob_control.turn_service:main',
+            'forward_server = frob_control.forward_service:main',
+            'robot_control = frob_control.client:main',
+            'turn_client = frob_control.turn_client:main'
         ],
     },
 )
