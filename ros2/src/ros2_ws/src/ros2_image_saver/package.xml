@@ -1,11 +1,17 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>frob_navigation</name>
+  <name>ros2_image_saver</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="robot@todo.todo">robot</maintainer>
-  <license>TODO: License declaration</license>
+  <description>a simple ros2 node for saving all images from the ros topic</description>
+  <maintainer email="sashakulagin2007@gmail.com">Alex Kulagin</maintainer>
+  <license>MIT license</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclpy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>opencv-python</depend>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

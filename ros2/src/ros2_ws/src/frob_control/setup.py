@@ -25,7 +25,8 @@ setup(
             'turn_server = frob_control.turn_service:main',
             'forward_server = frob_control.forward_service:main',
             'robot_control = frob_control.client:main',
-            'turn_client = frob_control.turn_client:main'
+            'turn_client = frob_control.turn_client:main',
+            'city = frob_control.task_city:main'
         ],
     },
 )
