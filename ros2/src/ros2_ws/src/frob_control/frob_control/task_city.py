@@ -7,30 +7,30 @@ class AnsCmdVelNode(Node):
     def __init__(self):
         super().__init__('city_node')
 
-        self.subscription = self.create_subscription(
+        self.camera_ans = self.create_subscription(
             Int32,
             '/camera/ans',
             self.camera_callback,
             10
         )
 
-        self.subscription = self.create_subscription(
+        self.left_distance = self.create_subscription(
             Float32,
-            '/laser/left_distance',
+            '/left_distance',
             self.left_dist_callback,
             10
         )
         
-        self.subscription = self.create_subscription(
+        self.right_distance = self.create_subscription(
             Float32,
-            '/laser/right_distance',
+            '/right_distance',
             self.right_dist_callback,
             10
         )
-        self.publisher = self.create_publisher(Twist, '/cmd_vel', 10)
-        self.kP = 0.02 #TODO: подобрать
-        self.timer = self.create_timer(0.5, self.timer_callback)
-
+        self.cmd_vel_pub = self.create_publisher(Twist, '/cmd_vel', 10)
+        self.kP = 0.4 #TODO: подобрать
+        #self.timer = self.create_timer(0.5, self.timer_callback)
+        self.cmd_vel_msg = Twist()
         self.last_camera_ans = None
         self.left_dist = None
         self.right_dist = None
@@ -42,22 +42,23 @@ class AnsCmdVelNode(Node):
     def left_dist_callback(self, msg):
         #self.get_logger().info(f' left_dist: {msg.data}')
         self.left_dist = msg.data
-
+        self.callback()
     def right_dist_callback(self, msg):
         #self.get_logger().info(f' right_dist: {msg.data}')
         self.right_dist = msg.data
+#        self.callback()
+    
+    def callback(self):
+        # self.get_logger().info('No data from /ans, executing default behavior.')
+        self.cmd_vel_msg = Twist()
+        self.cmd_vel_msg.angular.z = (0.4 - self.left_dist) * self.kP
+        
+        self.cmd_vel_msg.linear.x = 0.3 #TODO: подобрать
+        self.get_logger().info(f'{self.left_dist}')
+        self.cmd_vel_pub.publish(self.cmd_vel_msg)
 
-    def timer_callback(self):
-       # self.get_logger().info('No data from /ans, executing default behavior.')
-        if max(self.left_dist, self.right_dist) > 0.8:
-            if min(self.left_dist, self.right_dist) != 0: #Если не нули и не напротив дома
-                cmd_vel_msg = Twist()
-                cmd_vel_msg.angular.z =(0,4 - min(self.left_dist, self.right_dist)) * self.kP
-                self.cmd_vel_msg.linear.x = 0.2 #TODO: подобрать
-                self.publisher.publish(cmd_vel_msg)
 
-
-        self.get_logger().info('Sent default values to /cmd_vel (linear.x=0.0, angular.z=0.0)')
+        #self.get_logger().info('Sent default values to /cmd_vel (linear.x=0.0, angular.z=0.0)')
 
 def main(args=None):
     rclpy.init(args=args)

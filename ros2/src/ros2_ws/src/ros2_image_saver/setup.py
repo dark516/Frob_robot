@@ -22,7 +22,9 @@ setup(
     maintainer_email='sashakulagin2007@gmail.com',
     description='a simple ros2 node for saving all images from the ros topic',
     license='MIT license',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'image_saver = ros2_image_saver.image_saver:main',
