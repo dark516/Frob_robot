@@ -31,10 +31,29 @@
 <!-- Explain the purpose, target audience, and the benefits of using Frob. -->
 soon
 ## Installation
-<!-- Write an installation guide for different platforms -->
-<!-- Include instructions for setting up the software on Windows, macOS, and Linux. -->
-<!-- Mention any specific ROS versions or dependencies required. -->
-soon
+To get started with this project, follow the steps below.
+### 1. Clone the Repository
+Start by cloning this repository to your local machine:
+```bash
+git clone https://github.com/dark516/Frob_robot
+cd Frob_robot
+```
+
+### 2. Install ROS2
+This project requires ROS2 (we recommend using ROS-Jazzy). There are two options to install ROS2-jazzy:
+#### Option A: Install ROS2 using the provided scripts
+In the [installation](./installation) directory you will find scripts for installing ROS2 Jazzy along with the necessary dependencies for different computers. To use the scripts, run one of the following commands, depending on the device to install:
+##### Install ROS2 on the Workstation (Laptop or PC)
+```bash
+bash ./installation/install_jazzy_full.sh
+```
+##### Install ROS2 on the Raspberry pi (Robot)
+```bash
+bash ./installation/install_jazzy_base.sh
+```
+#### Option B: Manual Installation of ROS2
+If you'd prefer to install ROS2 manually, please refer to the official ROS2 installation guide [here](https://docs.ros.org/en/jazzy/Installation.html). This guide provides step-by-step instructions to set up ROS2 Jazzy on various platforms.
+
 ## Fabrication and Assembly
 <!-- Provide detailed instructions for fabricating and assembling the robot. -->
 <!-- Include information on 3D printing, materials needed, and step-by-step assembly guide. -->
