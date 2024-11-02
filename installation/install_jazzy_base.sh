@@ -10,7 +10,7 @@ set -eu
 # source: https://github.com/ros2/ros2_documentation
 
 CHOOSE_ROS_DISTRO=jazzy
-INSTALL_PACKAGE=base
+INSTALL_PACKAGE=ros-base
 TARGET_OS=noble
 
 # Check OS version

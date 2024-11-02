@@ -23,16 +23,18 @@ struct Encoder {
   int speed = 0;
   volatile long ticks = 0, prev_ticks = 0;
   byte pin_a, pin_b;
-  
-  Encoder (byte pin_enc_a, byte pin_enc_b, void(*on_enc)(void)) : pin_a(pin_enc_a), pin_b(pin_enc_b) {
+  bool invert;
+  Encoder (byte pin_enc_a, byte pin_enc_b, void(*on_enc)(void), bool inverted) : pin_a(pin_enc_a), pin_b(pin_enc_b), invert(inverted){
     pinMode(pin_a, INPUT);
     pinMode(pin_b, INPUT);
     attachInterrupt(digitalPinToInterrupt(pin_a), on_enc, RISING);
   }
 
   void encoder_int() {
-    if (digitalRead(pin_b)) ticks++;
-    else ticks--;
+    int step = 1;
+    if (invert) step*=-1;
+    if (digitalRead(pin_b)) ticks+=step;
+    else ticks-=step;
   }
 
   int calc_delta() {
