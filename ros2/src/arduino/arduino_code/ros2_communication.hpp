@@ -2,6 +2,11 @@
 
 #include "motor_regulator.h"
 
+
+#define TICKS_PER_REV 372
+#define WHEEL_D 67
+#define WHEEL_BASE 175
+
 extern Regulator left_regulator;
 extern Regulator right_regulator;
 
@@ -9,6 +14,7 @@ extern Regulator right_regulator;
 enum Commands : uint8_t {
   SET_MOTORS = 0x10,
   GET_DATA = 0x11,
+  TURN_ROBOT = 0x12,
 };
 
 struct Data {
@@ -48,6 +54,25 @@ void get_data(){
   Serial.write((uint8_t*)&ret, sizeof(ret));  
 }
 
+int turnAngle() {
+  wait_bytes(sizeof(int8_t));
+  int8_t angle = Serial.read();
+
+  float angle_rad = angle * (PI / 180);
+  float arc_distance = (WHEEL_BASE * angle_rad) / 2;
+  float ticks = (arc_distance * TICKS_PER_REV) / (WHEEL_D * PI);
+  if (angle > 0) {
+    left_regulator.next += (int)ticks;
+    right_regulator.next -= (int)ticks;
+  }else {
+    left_regulator.next -= (int)ticks;
+    right_regulator.next += (int)ticks;
+  }
+  return (int)ticks;
+}
+
+int ticks = 0;
+bool turn_flag = 0;
 void command_spin(){
     //Обработчик комманд
   if (Serial.available() > 1) {
@@ -55,6 +80,11 @@ void command_spin(){
     switch (code) {
     case SET_MOTORS: set_motors(); break;
     case GET_DATA: get_data(); break; 
+    case TURN_ROBOT: ticks = turnAngle(); turn_flag=1; break;
     }
+  }
+  if ((abs(left_regulator.encoder.ticks - ticks) < 50) and (left_regulator.encoder.speed == 0) and (right_regulator.encoder.speed == 0) and (turn_flag)) {
+    Serial.write(1);
+    turn_flag = 0;
   }
 }

@@ -1,4 +1,3 @@
-float32 time
-bool dir
+int32 angle
 ---
-bool success  # Ответ
+bool success

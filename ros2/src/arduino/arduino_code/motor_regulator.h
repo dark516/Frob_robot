@@ -1,7 +1,7 @@
 #pragma once
 
 #define DT 0.01
-#define MAX_DELTA 13 //Максимальная фактическая скорость
+#define MAX_DELTA 10 //Максимальная фактическая скорость
 
 struct PID {
   float kp, ki, kd, max_i;
@@ -74,7 +74,7 @@ struct Regulator {
   void update() {
     next += delta;
     motor.set_pwmdir(pid.calc(next - encoder.ticks));
-    //encoder.calc_delta();
+    encoder.calc_delta();
   }
 
   void set_delta(int new_delta) {
@@ -84,5 +84,4 @@ struct Regulator {
       motor.set_pwmdir(0);
     }
   }
-    
 };

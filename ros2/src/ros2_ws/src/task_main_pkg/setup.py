@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'frob_control'
+package_name = 'task_main_pkg'
 
 setup(
     name=package_name,
@@ -13,20 +13,17 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Alex Kulagin',
+    maintainer='dark516',
     maintainer_email='sashakulagin2007@gmail.com',
-    description='Frob control package',
-    license='Apache2',
+    description='Ros2 package for task main code',
+    license='Apache-2.0',
     extras_require={
         'test': ['pytest'],
     },
     entry_points={
         'console_scripts': [
-            'turn_server = frob_control.turn_service:main',
-            'forward_server = frob_control.forward_service:main',
-            'robot_control = frob_control.client:main',
-            'turn_client = frob_control.turn_client:main',
-            'city = frob_control.task_city:main'
+            'city_main_node = task_main_pkg.city_node:main',
+            'go_wall_node = task_main_pkg.move_wall:main'
         ],
     },
 )
