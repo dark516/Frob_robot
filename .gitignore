@@ -1,11 +1,6 @@
 # Ignore all .bak files in the models directory
 models/**/*.bak
 models/**/*\~
-# Ignore build artifacts and other unnecessary files from ROS1 packages
-ros1/src/ros/**/build/
-ros1/src/ros/**/devel/
-ros1/src/ros/**/install/
-
 # Ignore build artifacts and other unnecessary files from ROS2 packages
 /**/build
 /**/install
