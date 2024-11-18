@@ -62,6 +62,7 @@ echo "# export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
 set +u
 
 source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash
-
+source ~/.bashrc
+cd /home/robot/Frob_robot/ros2/src/ros2_ws
 echo "success installing ROS2 $CHOOSE_ROS_DISTRO"
 echo "Run 'source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash'"
