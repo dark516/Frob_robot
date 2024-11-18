@@ -6,7 +6,8 @@
 #define TICKS_PER_REV 372
 #define WHEEL_D 67
 #define WHEEL_BASE 175
-
+long rStart_ticks;
+long lStart_ticks;
 extern Regulator left_regulator;
 extern Regulator right_regulator;
 
@@ -55,19 +56,22 @@ void get_data(){
 }
 
 int turnAngle() {
-  wait_bytes(sizeof(int8_t));
+  wait_bytes(sizeof(int8_t) + sizeof(int8_t));
   int8_t angle = Serial.read();
-
+  int8_t speed = Serial.read();
+  
   float angle_rad = angle * (PI / 180);
   float arc_distance = (WHEEL_BASE * angle_rad) / 2;
   float ticks = (arc_distance * TICKS_PER_REV) / (WHEEL_D * PI);
   if (angle > 0) {
-    left_regulator.next += (int)ticks;
-    right_regulator.next -= (int)ticks;
+    left_regulator.set_delta(speed);
+    right_regulator.set_delta(-speed);
   }else {
-    left_regulator.next -= (int)ticks;
-    right_regulator.next += (int)ticks;
+    left_regulator.set_delta(-speed);
+    right_regulator.set_delta(speed);
   }
+  rStart_ticks = right_regulator.encoder.ticks;
+  lStart_ticks = left_regulator.encoder.ticks;
   return (int)ticks;
 }
 
@@ -83,7 +87,16 @@ void command_spin(){
     case TURN_ROBOT: ticks = turnAngle(); turn_flag=1; break;
     }
   }
-  if ((abs(left_regulator.encoder.ticks - ticks) < 50) and (left_regulator.encoder.speed == 0) and (right_regulator.encoder.speed == 0) and (turn_flag)) {
+  if ((abs(left_regulator.encoder.ticks - lStart_ticks) >= ticks) and (turn_flag)) {
+    for (int i = 0,  s = 255; i <= 15; i++, s = -s){
+      left_regulator.motor.set_pwmdir(s);
+      right_regulator.motor.set_pwmdir(s);
+      delay(5);
+    }
+    left_regulator.set_delta(0);
+    right_regulator.set_delta(0);
+    left_regulator.motor.set_pwmdir(0);
+    right_regulator.motor.set_pwmdir(0);
     Serial.write(1);
     turn_flag = 0;
   }

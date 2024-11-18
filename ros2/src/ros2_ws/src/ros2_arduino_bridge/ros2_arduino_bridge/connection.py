@@ -82,15 +82,15 @@ class ArduinoConnection:
         self._serial = serial
         # Команды этого устройства
         self._set_motors = Command(0x10, (Primitives.i8, Primitives.i8))
-        self._turn = Command(0x12, (Primitives.i8,))
+        self._turn = Command(0x12, (Primitives.i8, Primitives.i8))
         self._get_data = Command(0x11, (Primitives.u8,))
 
     # Обёртки над командами ниже, чтобы сразу компилировать и отправлять их в порт
     def setSpeeds(self, left: int, right: int) -> None:
         self._serial.write(self._set_motors.pack(left, right))
 
-    def turn_robot(self, angle: int) -> bool:
-        self._serial.write(self._turn.pack(angle))
+    def turn_robot(self, angle: int, speed: int) -> bool:
+        self._serial.write(self._turn.pack(angle, speed))
         response = self._serial.read()
         return Primitives.u8.unpack(response) 
 
@@ -129,6 +129,5 @@ if __name__ == '__main__':
 
     # arduino.setSpeeds(0, 1)
     # sleep(1)
-    # print(arduino.get_data())
 
     arduino.close()

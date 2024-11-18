@@ -43,7 +43,7 @@ class Arduino_bridge(Node):
 
     def handle_rotate_request(self, request, response):
         print(request.angle)
-        self._connect.turn_robot(request.angle)
+        self._connect.turn_robot(request.angle, request.speed)
         response.success = True
         return response
     
@@ -60,6 +60,7 @@ class Arduino_bridge(Node):
         right_motor_speed = self.clamp_motor_speed(right_motor_speed)
 
         if left_motor_speed != self.last_left_motor_speed or right_motor_speed != self.last_right_motor_speed:
+            #print(left_motor_speed, right_motor_speed)
             self._connect.setSpeeds(left_motor_speed, right_motor_speed)
             self.last_left_motor_speed = left_motor_speed
             self.last_right_motor_speed = right_motor_speed

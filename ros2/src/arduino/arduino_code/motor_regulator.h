@@ -72,15 +72,21 @@ struct Regulator {
   Regulator (Motor&& motor, Encoder&& encoder, PID&& pid) : motor(motor), encoder(encoder), pid(pid) {}
 
   void update() {
-    next += delta;
-    motor.set_pwmdir(pid.calc(next - encoder.ticks));
-    encoder.calc_delta();
-  }
+    if (delta == 0){
+      motor.set_pwmdir(0);
+      next = encoder.ticks;
+    }else {
+      next += delta;
+      motor.set_pwmdir(pid.calc(next - encoder.ticks));
+      encoder.calc_delta();
+    }
 
+  }
   void set_delta(int new_delta) {
     delta = constrain(new_delta, -MAX_DELTA, MAX_DELTA);
     if(new_delta == 0) {
       next = encoder.ticks;
+      delta = 0;
       motor.set_pwmdir(0);
     }
   }

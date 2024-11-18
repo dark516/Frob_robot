@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'task_main_pkg'
+package_name = 'city_task_nodes'
 
 setup(
     name=package_name,
@@ -15,15 +15,17 @@ setup(
     zip_safe=True,
     maintainer='dark516',
     maintainer_email='sashakulagin2007@gmail.com',
-    description='Ros2 package for task main code',
+    description='nodes for rtk cup, city task',
     license='Apache-2.0',
     extras_require={
         'test': ['pytest'],
     },
     entry_points={
         'console_scripts': [
-            'city_main_node = task_main_pkg.city_node:main',
-            'go_wall_node = task_main_pkg.move_wall:main'
+            'main_node = city_task_nodes.main_node:main',
+            'go_wall_node = city_task_nodes.move_wall:main',
+            'ceil_definition = city_task_nodes.ceil_definition:main'
         ],
     },
+
 )
