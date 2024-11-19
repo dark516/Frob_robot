@@ -6,6 +6,7 @@ models/**/*\~
 /**/install
 /**/log
 
+/**/.idea
 # Ignore temporary files and directories
 *.swp
 *.swo

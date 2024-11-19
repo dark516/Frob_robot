@@ -87,7 +87,7 @@ void command_spin(){
     case TURN_ROBOT: ticks = turnAngle(); turn_flag=1; break;
     }
   }
-  if ((abs(left_regulator.encoder.ticks - lStart_ticks) >= ticks) and (turn_flag)) {
+  if ((abs(left_regulator.encoder.ticks - lStart_ticks) >= abs(ticks)) and (turn_flag)) {
     for (int i = 0,  s = 255; i <= 15; i++, s = -s){
       left_regulator.motor.set_pwmdir(s);
       right_regulator.motor.set_pwmdir(s);

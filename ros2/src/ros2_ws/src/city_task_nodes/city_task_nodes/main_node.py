@@ -1,14 +1,28 @@
 import rclpy
 from rclpy.node import Node
+from std_msgs.msg import Int32
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist
 import time
 
-class WallFollowerNode(Node):
-    def __init__(self):
-        super().__init__('wall_follower')
+class CityMainNode(Node):
 
-        # Параметры PID-регулятора
+    def __init__(self):
+        super().__init__('city_main_node')
+
+        self.curr_ceil_subscriber = self.create_subscription(
+            Int32,
+            '/curr_ceil',
+            self.curr_ceil_callback,
+            10
+        )
+        self.camera_ans_subscriber = self.create_subscription(
+            Int32,
+            '/camera/ans',
+            self.camera_ans_callback,
+            10
+        )
+
         self.target_distance = 0.5  # Целевое расстояние до стены (в метрах)
         self.kp = 0.03             # Пропорциональный коэффициент
         self.ki = 0.008             # Интегральный коэффициент
@@ -28,16 +42,18 @@ class WallFollowerNode(Node):
             self.distance_callback,
             10
         )
-
-        # Публикация скорости
         self.cmd_vel_publisher = self.create_publisher(Twist, '/cmd_vel', 10)
+
+        self.curr_ceil = 0
+        self.camera_ans = 2
+        self.pre_ans = []
 
     def distance_callback(self, msg):
         # Получаем текущее значение расстояния
         self.current_distance = msg.data
+        if self.curr_ceil % 2 == 0:
+            self.update_velocity()
 
-        # Вызываем функцию обновления скорости
-        self.update_velocity()
 
     def update_velocity(self):
         # Проверка, что расстояние получено
@@ -78,12 +94,43 @@ class WallFollowerNode(Node):
         # Публикация сообщения
         self.cmd_vel_publisher.publish(cmd_msg)
 
+    def curr_ceil_callback(self, msg):
+        self.curr_ceil = msg.data
+        if self.curr_ceil % 2 != 0: #Клетка без знаков
+            self.camera_ans = max(self.pre_ans, key=self.pre_ans.count) #Выбираем, наиболее частую команду роботу
+            match self.camera_ans:
+                case 0:
+                    self.get_logger().info('Аруко - остановка')
+                    self.cmd_vel_publisher.publish(Twist())  # Остановка робота
+                    rclpy.shutdown()  # Выключение ноды
+                case 1:
+                    self.get_logger().info('Знак - Налево')
+
+                case 2:
+                    self.get_logger().info('Знак - Прямо')
+                case 3:
+                    self.get_logger().info('Знак - Направо')
+                case _:
+                    self.get_logger().warn('Неверное значение знака! Tребуется проверка соответствующей ноды')
+
+    def camera_ans_callback(self, msg):
+        if self.curr_ceil % 2 == 0: #Клетка со знаком
+            self.pre_ans.append(msg.data)
+
+
 def main(args=None):
     rclpy.init(args=args)
-    node = WallFollowerNode()
-    rclpy.spin(node)
+    node = CityMainNode()
+
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+
     node.destroy_node()
     rclpy.shutdown()
 
+
 if __name__ == '__main__':
     main()
+
