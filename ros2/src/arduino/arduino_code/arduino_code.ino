@@ -32,6 +32,11 @@ void setup() {
   //left_regulator.motor.set_pwmdir(255);
   //right_regulator.set_delta(1);
   //turnAngle(90);
+  oled.init();        // инициализация
+  oled.clear();       // очистка
+  oled.setScale(3);   // масштаб текста (1..4)
+  oled.home();        // курсор в 0,0
+  //oled.print(200);
   Serial.begin(115200);
 }
 

@@ -1,0 +1,4 @@
+int32 dist
+int32 speed
+---
+bool success

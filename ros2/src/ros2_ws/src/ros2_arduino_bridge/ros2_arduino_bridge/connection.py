@@ -20,7 +20,7 @@ class Primitives(Enum):
     """int16_t"""
     u16 = Struct("H")
     """uint16_t"""
-    i32 = Struct("l")
+    i32 = Struct("<l")
     """int32_t"""
     u32 = Struct("L")
     """uint32_t"""
@@ -64,8 +64,6 @@ class Command:
         self.header: Final[bytes] = Primitives.u8.pack(code)
         self.signature = signature
 
-        
-
     def pack(self, *args) -> bytes:
         """
         Скомпилировать команду в набор байт
@@ -84,6 +82,7 @@ class ArduinoConnection:
         self._set_motors = Command(0x10, (Primitives.i8, Primitives.i8))
         self._turn = Command(0x12, (Primitives.i8, Primitives.i8))
         self._get_data = Command(0x11, (Primitives.u8,))
+        self._go_dist = Command(0x13, (Primitives.i32, Primitives.i32))
 
     # Обёртки над командами ниже, чтобы сразу компилировать и отправлять их в порт
     def setSpeeds(self, left: int, right: int) -> None:
@@ -92,14 +91,19 @@ class ArduinoConnection:
     def turn_robot(self, angle: int, speed: int) -> bool:
         self._serial.write(self._turn.pack(angle, speed))
         response = self._serial.read()
-        return Primitives.u8.unpack(response) 
+        return Primitives.u8.unpack(response)
+
+    def go_dist(self, dist: int, speed: int) -> bool:
+        self._serial.write(self._go_dist.pack(dist, speed))
+        print(self._go_dist.pack(dist, speed))
+        response = self._serial.read()
+        print(response)
+        return Primitives.u8.unpack(response)
 
     def get_data(self):
         self._serial.write(self._get_data.pack(1))
-        
         data_bytes = self._serial.read(Data.data_packer.size)
         return Data.make(data_bytes)
-
 
     def close(self):
         self._serial.close()
@@ -109,7 +113,8 @@ if __name__ == '__main__':
     arduino = ArduinoConnection(Serial(port_name, 115200))
 
     sleep(2)
-    print(arduino.turn_robot(90))
+    #print(arduino.turn_robot(90, 4))
+    print(arduino.go_dist(200, 2))
     # print(arduino.get_data())
 
     # arduino.setSpeeds(0, 0)

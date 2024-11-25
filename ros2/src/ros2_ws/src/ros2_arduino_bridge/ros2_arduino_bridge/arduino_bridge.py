@@ -7,7 +7,7 @@ from time import sleep
 import rclpy
 import sys
 
-from frob_interfaces.srv import Turn
+from frob_interfaces.srv import Turn, Forward
 from ros2_arduino_bridge.connection import ArduinoConnection
 
 class Arduino_bridge(Node):
@@ -24,6 +24,7 @@ class Arduino_bridge(Node):
         self._connect = connection
 
         self.srv = self.create_service(Turn, 'rotate_robot', self.handle_rotate_request)
+        self.srv2 = self.create_service(Forward, 'forward_robot', self.handle_forward_request)
         self.subscription = self.create_subscription(
             Twist,
             "/cmd_vel",
@@ -38,15 +39,21 @@ class Arduino_bridge(Node):
 
         self.last_left_motor_speed = None
         self.last_right_motor_speed = None
-        
-        self.data_request_timer = self.create_timer(0.05, self.data)  # Запрос данных раз в 1 секунду
+
+        self.data_request_timer = self.create_timer(0.1, self.data)  # Запрос данных раз в 1 секунду
 
     def handle_rotate_request(self, request, response):
         print(request.angle)
         self._connect.turn_robot(request.angle, request.speed)
         response.success = True
         return response
-    
+
+    def handle_forward_request(self, request, response):
+        print(request.dist)
+        self._connect.go_dist(request.dist, request.speed)
+        response.success = True
+        return response
+
     def cmd_vel_callback(self, msg):
         # Извлечение линейной и угловой скорости из сообщения Twist
         linear = msg.linear.x
