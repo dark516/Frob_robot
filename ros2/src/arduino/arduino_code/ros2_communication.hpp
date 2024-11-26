@@ -11,6 +11,7 @@ long dist_rStart_ticks;
 long dist_lStart_ticks;
 long turn_rStart_ticks;
 long turn_lStart_ticks;
+long duration, cm;
 extern Regulator left_regulator;
 extern Regulator right_regulator;
 //Команды с ROS ноды
@@ -22,8 +23,9 @@ enum Commands : uint8_t {
 };
 
 struct Data {
-  int16_t left_encoder_delta;
-  int16_t right_encoder_delta;
+  //int16_t left_encoder_delta;
+  //int16_t right_encoder_delta;
+  uint16_t dist;
 };
 
 template <typename T> void serial_read(T& dest) {
@@ -40,6 +42,16 @@ void wait_bytes(uint16_t b) {
     ; // Ожидание прибытия всего пакета
   }
 }
+int getDist() {
+  digitalWrite(11, LOW);
+  delayMicroseconds(5);
+  digitalWrite(11, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(11, LOW);
+  duration = pulseIn(12, HIGH);
+  cm = (duration / 2) / 29.1;
+  return cm;
+}
 
 void set_motors(){
   wait_bytes(sizeof(int8_t) + sizeof(int8_t));
@@ -52,9 +64,10 @@ void set_motors(){
 
 void get_data(){
   wait_bytes(sizeof(int8_t));
-  left_regulator.encoder.calc_delta();
-  right_regulator.encoder.calc_delta();
-  Data ret{left_regulator.encoder.speed, right_regulator.encoder.speed};
+//  left_regulator.encoder.calc_delta();
+//  right_regulator.encoder.calc_delta();
+  uint16_t dist = getDist();
+  Data ret{dist};
   Serial.write((uint8_t*)&ret, sizeof(ret));  
 }
 

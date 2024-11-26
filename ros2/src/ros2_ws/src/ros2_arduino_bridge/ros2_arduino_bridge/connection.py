@@ -43,10 +43,9 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Data:
-    left: int
-    right: int
+    dist: int
 
-    data_packer = Struct("hh")
+    data_packer = Struct("H")
 
     @classmethod
     def make(cls, buffer: bytes):

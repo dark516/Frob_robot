@@ -1,6 +1,8 @@
 #include "motor_regulator.h"
 #include "ros2_communication.hpp"
 
+#define PIN_TRIG 11
+#define PIN_ECHO 12
 
 //ЛЕВЫЙ МОТОР
 void __left_motor_enc(); //Заголовок функции
@@ -32,6 +34,8 @@ void setup() {
   //left_regulator.motor.set_pwmdir(255);
   //right_regulator.set_delta(1);
   //turnAngle(90);
+  pinMode(PIN_TRIG, OUTPUT);
+  pinMode(PIN_ECHO, INPUT);
   oled.init();        // инициализация
   oled.clear();       // очистка
   oled.setScale(3);   // масштаб текста (1..4)
