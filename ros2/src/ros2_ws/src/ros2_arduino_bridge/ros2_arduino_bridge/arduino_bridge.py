@@ -31,9 +31,8 @@ class Arduino_bridge(Node):
             self.cmd_vel_callback,
             10)
 
-#        self.left_speed_pub = self.create_publisher(Int32, 'left_motor/encoder/delta', 10)
- #       self.right_speed_pub = self.create_publisher(Int32, 'right_motor/encoder/delta', 10)
-        self.dist_pub = self.create_publisher(Int32, '/left_distance', 10)
+        self.left_speed_pub = self.create_publisher(Int32, 'left_motor/encoder/delta', 10)
+        self.right_speed_pub = self.create_publisher(Int32, 'right_motor/encoder/delta', 10)
 
         self.wheel_base = 0.175  # Расстояние между колесами в метрах
         self.wheel_radius = 0.0325  # Радиус колес в метрах
@@ -76,9 +75,8 @@ class Arduino_bridge(Node):
     def data(self):
         #Отправка данных
         arduino_data = self._connect.get_data()
-  #      self.left_speed_pub.publish(Int32(data=arduino_data.left))
-   #     self.right_speed_pub.publish(Int32(data=arduino_data.right))
-        self.dist_pub.publish(Int32(data=arduino_data.dist))
+        self.left_speed_pub.publish(Int32(data=arduino_data.left))
+        self.right_speed_pub.publish(Int32(data=arduino_data.right))
 
     def shutdown(self) -> None:
         self._connect.close()
