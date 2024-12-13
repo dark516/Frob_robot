@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="frob" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:property name="clearance" value="0.02"/>
+    <xacro:property name="wheel_radius" value="0.0344"/>
+    <xacro:property name="wheel_separation" value="0.152"/>
+    <xacro:property name="wheel_width" value="0.026"/>
+    <xacro:property name="PI" value="3.1415926536"/>
+
+    <link name="base_footprint">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.11" length="0.001"/>
+            </geometry>
+            <material name="blue">
+                <color rgba="0.0 0.0 1.0 0.5"/> 
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.11" length="0.001"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="robot_base">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.11" length="0.01"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.11" length="0.01"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="left_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <cylinder radius="0.0344" length="0.026"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <cylinder radius="0.0344" length="0.026"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="right_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <cylinder radius="0.0344" length="0.026"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <cylinder radius="0.0344" length="0.026"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="forward_caster_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/> 
+            <geometry>
+                <sphere radius="0.0075"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <sphere radius="0.0075"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="backward_caster_wheel">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/> 
+            <geometry>
+                <sphere radius="0.0075"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 1.5707963268 0"/>
+            <geometry>
+                <sphere radius="0.0075"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="lidar">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.03" length="0.025"/>
+            </geometry>
+            <material name="yellow">
+                <color rgba="1 1 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.03" length="0.025"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="laser">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.03" length="0.025"/>
+            </geometry>
+            <material name="yellow">
+                <color rgba="1 1 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.03" length="0.025"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_to_base_link_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="robot_base"/>
+        <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="left_wheel_to_base_joint" type="continuous">
+        <parent link="robot_base"/>
+        <child link="left_wheel"/>
+        <origin xyz="0 -0.0896 0.0172" rpy="0 0 1.5707963268"/>
+    </joint>
+
+    <joint name="right_wheel_to_base_joint" type="continuous">
+        <parent link="robot_base"/>
+        <child link="right_wheel"/>
+        <origin xyz="0 0.0896 0.0172" rpy="0 0 1.5707963268"/>
+    </joint>
+
+    <joint name="forward_wheel_to_base_joint" type="continuous"> 
+        <parent link="robot_base"/>
+        <child link="forward_caster_wheel"/>
+        <origin xyz="-0.065 0 -0.0075" rpy="0 0 1.5707963268"/> 
+    </joint>
+
+    <joint name="backward_wheel_to_base_joint" type="continuous"> 
+        <parent link="robot_base"/>
+        <child link="backward_caster_wheel"/>
+        <origin xyz="0.055 0 -0.0075" rpy="0 0 1.5707963268"/>
+    </joint>
+
+    <joint name="lidar_to_base_joint" type="fixed">
+        <parent link="robot_base"/>
+        <child link="lidar"/>
+        <origin xyz="0.07 0 0.04" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="laser_to_lidar" type="fixed">
+        <parent link="lidar"/>
+        <child link="laser"/>
+        <origin xyz="0 0 0" rpy="0 0 -1.570796325"/>
+    </joint>
+
+</robot>
+
