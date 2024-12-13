@@ -16,7 +16,6 @@
 </div>
 
 ## Table of Contents
-- [Introduction](#introduction)
 - [Installation](#installation)
 - [Fabrication and Assembly](#fabrication-and-assembly)
 - [Basic Usage](#basic-usage)
@@ -26,10 +25,6 @@
 
 ---
 
-## Introduction
-<!-- Write a detailed description of the Frob robot -->
-<!-- Explain the purpose, target audience, and the benefits of using Frob. -->
-soon
 ## Installation
 To get started with this project, follow the steps below.
 ### 1. Clone the Repository
