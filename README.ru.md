@@ -61,13 +61,12 @@ sudo apt install arp-scan
 ```bash
 sudo arp-scan --localnet
 ```
-![Пример arp-scan с выделенными IP-адресами](TODO: Добавить сюда картинку из arp-scan с выделенными IP-адресами)
-
+![Пример arp-scan с выделенными IP-адресами](https://github.com/dark516/Frob_robot/blob/main/images/arp-scan.jpg?raw=true)
 После определения IP-адреса, подключитесь к роботу через SSH:
 ```bash
 ssh login@ip
 ```
-
+![Пример подключения по ssh](https://github.com/dark516/Frob_robot/blob/main/images/ssh.jpg?raw=true)
 ### Рабочая директория
 Рабочая директория содержит весь исходный код проекта и служит для его сборки и настройки. Для перехода в неё выполните:
 ```bash
@@ -79,7 +78,7 @@ colcon build
 source install/setup.bash
 ```
 ### Запуск робота
-Для запуска большинства функциональных модулей робота выполните в рабочей директории:
+Для запуска большинства функциональных модулей выполните в рабочей директории на роботе:
 ```bash
 ros2 launch frob_bringup bringup.launch.py
 ```
@@ -92,7 +91,9 @@ ros2_arduino_bridge — пакет для связи с низкоуровнев
 rqt
 ```
 И запустите «Plugins» → «Robot Tools» → «Robot Steering».
-TODO: Дополнить описание работы с этим плагином.
+![Интерфейс RQT](https://github.com/dark516/Frob_robot/blob/main/images/rqt.jpg?raw=true)
+
+Вам нужно указать топик моторов (cmd_vel) и двигая ползунки ниже можно управлять линейной и угловой скоростью робота.
 #### Визуализация перемещений (одометрии)
 Вы можете визуализировать движение робота с помощью пакета одометрии (frob_odometry). Для этого выполните:
 ```bash
