@@ -8,7 +8,7 @@
 
 **Frob** is an open—source low cost mobile robot created to promote robotics and [ROS](https://www.ros.org/) training. It is designed for enthusiasts, students, and teachers exploring the world of robotics. Whether you are a beginner or an experienced developer, Frob provides a versatile platform for addressing a wide range of learning challenges.
 
-[![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=flat-square&logo=github)](https://github.com/dark516/Frob_robot/wiki)
+<!--[![Wiki](https://img.shields.io/badge/Wiki-Documentation-blue?style=flat-square&logo=github)](https://github.com/dark516/Frob_robot/wiki) -->
 [![Telegram](https://img.shields.io/badge/Telegram-Community-blue?style=flat-square&logo=telegram)](https://t.me/FrobCommunity)
 [![License](https://img.shields.io/github/license/dark516/Frob_robot?style=flat-square)](https://github.com/dark516/Frob_robot/blob/main/LICENSE)
 [![Issues](https://img.shields.io/github/issues/dark516/Frob_robot?style=flat-square)](https://github.com/dark516/Frob_robot/issues)
