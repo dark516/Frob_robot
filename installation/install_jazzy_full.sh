@@ -52,16 +52,15 @@ sudo apt-get install -y python3-rosdep python3-vcstool
 [ -e /etc/ros/rosdep/sources.list.d/20-default.list ] ||
 sudo rosdep init
 rosdep update
+sudo apt-get install -y ros-jazzy-rqt-robot-steering
 grep -F "source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash" ~/.bashrc ||
 echo "source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash" >> ~/.bashrc
-# From ROS 2 Iron, it uses ROS_AUTOMATIC_DISCOVERY_RANGE instead of ROS_LOCALHOST_ONLY
-# https://docs.ros.org/en/iron/Releases/Release-Iron-Irwini.html#improved-discovery-options
 grep -F "export ROS_AUTOMATIC_DISCOVERY_RANGE=" ~/.bashrc ||
-echo "# export ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST" >> ~/.bashrc
+echo "export ROS_DOMAIN_ID=78" >> ~/.bashrc
 
 set +u
 
 source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash
-
+source ~/.bashrc
 echo "success installing ROS2 $CHOOSE_ROS_DISTRO"
 echo "Run 'source /opt/ros/$CHOOSE_ROS_DISTRO/setup.bash'"

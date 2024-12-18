@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="frob"
+	xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="robot_caster_wheel_1">
+		<inertial>
+			<origin xyz="0 1.6073E-19 0" rpy="0 0 0"/>
+			<mass value="0.011207"/>
+			<inertia ixx="2.1965E-07" ixy="-1.5533E-55" ixz="-1.9776E-56" iyy="2.1965E-07" iyz="-2.2674E-40" izz="2.1965E-07"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_caster_wheel.STL" />
+			</geometry>
+			<material name="Green" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_caster_wheel.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<link name="robot_caster_wheel_2">
+		<inertial>
+			<origin xyz="0 1.6073E-19 0" rpy="0 0 0"/>
+			<mass value="0.011207"/>
+			<inertia ixx="2.1965E-07" ixy="-1.5533E-55" ixz="-1.9776E-56" iyy="2.1965E-07" iyz="-2.2674E-40" izz="2.1965E-07"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_caster_wheel.STL" />
+			</geometry>
+			<material name="Green" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_caster_wheel.STL" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="caster_wheel_1_to_base" type="continuous">
+		<origin xyz="-0.065 0 0.0075" rpy="0 0 0" />
+		<parent link="robot_base" />
+		<child link="robot_caster_wheel_1" />
+		<axis xyz="0 1 0" />
+	</joint>
+	<joint name="caster_wheel_2_to_base" type="continuous">
+		<origin xyz="0.055 0 0.0075" rpy="0 0 0" />
+		<parent link="robot_base" />
+		<child link="robot_caster_wheel_2" />
+		<axis xyz="0 1 0" />
+	</joint>
+</robot>

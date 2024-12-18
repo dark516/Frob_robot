@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="frob"
+	xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<link name="laser_frame">
+		<inertial>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<mass value="0"/>
+			<inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_lidar.STL"/>
+			</geometry>
+			<material name="Yellow"/>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://frob_description/meshes/frob_lidar.STL"/>
+			</geometry>
+		</collision>
+	</link>
+	<joint name="lidar_to_base" type="fixed">
+		<origin xyz="-0.06 0.0002 0.15" rpy="0 0 ${PI}"/>
+		<parent link="robot_base"/>
+		<child link="laser_frame"/>
+		<axis xyz="0 0 0"/>
+	</joint>
+</robot>
