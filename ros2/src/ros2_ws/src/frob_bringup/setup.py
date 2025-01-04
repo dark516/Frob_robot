@@ -18,6 +18,8 @@ setup(
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [],
+        'console_scripts': [
+             'keyboard_teleop = frob_bringup.cmd_vel_teleop:main',
+        ],
     },
 )

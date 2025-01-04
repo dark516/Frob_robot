@@ -87,10 +87,10 @@ struct Regulator {
     if(new_delta == 0) {
       next = encoder.ticks;
       delta = 0;
-      for (int i=0, s=255; i < 15; i++, s=-s){
-        motor.set_pwmdir(s);
-        delay(5);
-      }
+//      for (int i=0, s=255; i < 15; i++, s=-s){
+//        motor.set_pwmdir(s);
+//        delay(5);
+//      }
       motor.set_pwmdir(0);
     }
   }
