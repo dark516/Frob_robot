@@ -36,17 +36,15 @@ void setup() {
   //turnAngle(90);
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
-  oled.init();        // инициализация
-  oled.clear();       // очистка
-  oled.setScale(3);   // масштаб текста (1..4)
-  oled.home();        // курсор в 0,0
+//  oled.init();        // инициализация
+//  oled.clear();       // очистка
+//  oled.setScale(3);   // масштаб текста (1..4)
+//  oled.home();        // курсор в 0,0
   //oled.print(200);
   Serial.begin(115200);
 }
 
 #define PT(x) Serial.print(x); Serial.print('\t')
-
-
 
 void loop() {
   static unsigned long freq = millis();
@@ -65,6 +63,5 @@ void loop() {
 //    PT(right_regulator.encoder.ticks); //Отправка установочной скорости левого мотора
 //    Serial.println();
   }
-
   
 }

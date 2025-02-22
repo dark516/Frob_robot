@@ -1,8 +1,8 @@
 #pragma once
 
 #include "motor_regulator.h"
-#include <GyverOLED.h>
-GyverOLED<SSD1306_128x64, OLED_NO_BUFFER> oled;
+//#include <GyverOLED.h>
+//GyverOLED<SSD1306_128x64, OLED_NO_BUFFER> oled;
 
 #define TICKS_PER_REV 372
 #define WHEEL_D 67
@@ -103,9 +103,9 @@ int goDist(){
   Serial.readBytes((char*)&dist, sizeof(int32_t));
   Serial.readBytes((char*)&speed, sizeof(int32_t));
   float ticks = (dist * TICKS_PER_REV) / (WHEEL_D * PI);
-  oled.print(dist);
-  oled.setCursor(0, 3);
-  oled.print(speed);
+//  oled.print(dist);
+//  oled.setCursor(0, 3);
+//  oled.print(speed);
 
   
   if (dist > 0) {
