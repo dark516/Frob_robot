@@ -78,6 +78,7 @@ struct Regulator {
     }else {
       next += delta;
       motor.set_pwmdir(pid.calc(next - encoder.ticks));
+      // проверить нужно ли это тут
       encoder.calc_delta();
     }
 

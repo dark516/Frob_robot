@@ -1,0 +1,15 @@
+encoder_odometry:
+  ros__parameters:
+    # Параметры энкодеров
+    meters_per_tick: 0.00057    # м/тик
+    wheel_base: 0.18            # м
+    
+    # Настройки публикации
+    publish_tf: true           # публиковать TF-трансформации
+    odom_frame_id: "odom"      # имя фрейма одометрии
+    base_frame_id: "base_link" # имя базового фрейма
+    
+    # Настройки фильтрации
+    encoder_min: -32768        # минимальное значение энкодера
+    encoder_max: 32767         # максимальное значение энкодера
+    update_rate: 10.0          # частота обновления (Гц)

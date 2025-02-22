@@ -26,9 +26,9 @@ class EncoderOdometryNode(Node):
         self.theta = 0.0  # ориентация (угол поворота вокруг оси Z)
 
         # Параметры робота
-        self.wheel_base = 0.175  # расстояние между колесами (м)
-        self.wheel_radius = 0.0325  # радиус колеса (м)
-        self.encoder_ticks_per_rev = 360  # количество тиков энкодера на один оборот
+        self.wheel_base = 0.0875  # расстояние между колесами (м)
+        self.wheel_radius = 0.01625  # радиус колеса (м)
+        self.encoder_ticks_per_rev = 720  # количество тиков энкодера на один оборот
 
         # Дельты энкодеров
         self.left_encoder_delta = 0
@@ -74,8 +74,8 @@ class EncoderOdometryNode(Node):
 
     def publish_odometry(self):
         # Получаем текущее время
-#        current_time = self.get_clock().now().to_msg()
-        current_time = rclpy.time.Time()
+        current_time = self.get_clock().now().to_msg()
+
         # Формируем сообщение об одометрии
         odom_msg = Odometry()
         odom_msg.header.stamp = current_time
@@ -90,8 +90,8 @@ class EncoderOdometryNode(Node):
         odom_quat = self.euler_to_quaternion(0, 0, self.theta)
         odom_msg.pose.pose.orientation = Quaternion(x=odom_quat[0], y=odom_quat[1], z=odom_quat[2], w=odom_quat[3])
 
-        # Линейная и угловая скорость (можно оставить нули, если скорости не рассчитываются)
-        odom_msg.child_frame_id = 'base_link'
+        # Линейная и угловая скорость
+        odom_msg.child_frame_id = 'base_footprint'
         odom_msg.twist.twist.linear.x = 0.0
         odom_msg.twist.twist.linear.y = 0.0
         odom_msg.twist.twist.angular.z = 0.0
@@ -103,7 +103,7 @@ class EncoderOdometryNode(Node):
         t = TransformStamped()
         t.header.stamp = current_time
         t.header.frame_id = 'odom'
-        t.child_frame_id = 'base_link'
+        t.child_frame_id = 'base_footprint'
         t.transform.translation.x = self.x
         t.transform.translation.y = self.y
         t.transform.translation.z = 0.0
@@ -126,4 +126,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-
