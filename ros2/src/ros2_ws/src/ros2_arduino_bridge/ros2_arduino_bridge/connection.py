@@ -3,7 +3,7 @@
 """
 from enum import Enum
 from struct import Struct
-from time import sleep
+import time
 from typing import Final
 
 from serial import Serial
@@ -28,7 +28,7 @@ class Primitives(Enum):
     """int64_t"""
     I64 = Struct("Q")
     """unt64_t"""
-    f32 = Struct("f")
+    f32 = Struct("<f")
     """float"""
     f64 = Struct("d")  # ! Не поддерживается на Arduino
     """double"""
@@ -43,10 +43,11 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Data:
-    left: int
-    right: int
-    
-    data_packer = Struct("hh")
+    left_delta: int
+    right_delta: int
+    left_speed: float
+    right_speed: float
+    data_packer = Struct("hhff")
 
     @classmethod
     def make(cls, buffer: bytes):
@@ -79,14 +80,15 @@ class ArduinoConnection:
     def __init__(self, serial: Serial) -> None:
         self._serial = serial
         # Команды этого устройства
-        self._set_motors = Command(0x10, (Primitives.i8, Primitives.i8))
+        self._set_velocity = Command(0x10, (Primitives.f32, Primitives.f32))
         self._turn = Command(0x12, (Primitives.i8, Primitives.i8))
         self._get_data = Command(0x11, (Primitives.u8,))
         self._go_dist = Command(0x13, (Primitives.i32, Primitives.i32))
-
+        self._handshake_command = Command(0x14, (Primitives.u8,))
+        self._handshake_response = b"ARDUINO_OK"
     # Обёртки над командами ниже, чтобы сразу компилировать и отправлять их в порт
-    def setSpeeds(self, left: int, right: int) -> None:
-        self._serial.write(self._set_motors.pack(left, right))
+    def setSpeeds(self, linear: float, angular: float) -> None:
+        self._serial.write(self._set_velocity.pack(linear, angular))
 
     def turn_robot(self, angle: int, speed: int) -> bool:
         self._serial.write(self._turn.pack(angle, speed))
@@ -104,7 +106,24 @@ class ArduinoConnection:
         self._serial.write(self._get_data.pack(1))
         data_bytes = self._serial.read(Data.data_packer.size)
         return Data.make(data_bytes)
-
+    
+    def is_arduino(self, timeout=0.5) -> bool:
+        start_time = time.time()
+        try:
+            self._serial.reset_input_buffer()
+            self._serial.write(self._handshake_command.pack(0xFF))
+            self._serial.flush()
+            
+            while time.time() - start_time < timeout:
+                if self._serial.in_waiting >= len(self._handshake_response):
+                    response = self._serial.read(len(self._handshake_response))
+                    return response == self._handshake_response
+                time.sleep(0.01)
+                
+            return False
+        except Exception:
+            return False
+        
     def close(self):
         self._serial.close()
 

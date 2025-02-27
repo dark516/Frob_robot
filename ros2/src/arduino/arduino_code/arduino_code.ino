@@ -1,67 +1,44 @@
 #include "motor_regulator.h"
 #include "ros2_communication.hpp"
 
-#define PIN_TRIG 11
-#define PIN_ECHO 12
+// Форвард-декларации
+class Regulator;
+extern Regulator left_regulator;
+extern Regulator right_regulator;
 
-//ЛЕВЫЙ МОТОР
-void __left_motor_enc(); //Заголовок функции
-//Создание экземпляра левого регулятора
-Regulator left_regulator(
-  Motor(7, 6),
-  Encoder(3, 12, __left_motor_enc, false),
-  PID(1.1, 0.01, 0.005, 100) 
-);
+// arduino_code.ino
 
-void __left_motor_enc() {
-  left_regulator.encoder.encoder_int();
-}
+Motor left_motor(7, 6);
+Motor right_motor(4, 5);
 
-//ПРАВЫЙ МОТОР
-void __right_motor_enc(); //Заголовок функции
-//Создание экземпляра правого регулятора
-Regulator right_regulator(
-  Motor(4, 5),
-  Encoder(2, 13, __right_motor_enc, true),
-  PID(1.1, 0.01, 0.005, 100) 
-);
+// Создаем энкодеры
+Encoder left_enc(3, 12, []{ left_regulator.encoder.encoder_int(); }, false);
+Encoder right_enc(2, 13, []{ right_regulator.encoder.encoder_int(); }, true);
 
-void __right_motor_enc() {
-  right_regulator.encoder.encoder_int();
-}
+// Создаем PID-регуляторы
+PID left_pid(4.0, 0.2, 0.04, 100);
+PID right_pid(4.0, 0.2, 0.04, 100);
+
+// Создаем регуляторы, передавая созданные объекты
+Regulator left_regulator(left_motor, left_enc, left_pid);
+Regulator right_regulator(right_motor, right_enc, right_pid);
 
 void setup() {
-  //left_regulator.motor.set_pwmdir(255);
-  //right_regulator.set_delta(1);
-  //turnAngle(90);
+  Serial.begin(115200);
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
-//  oled.init();        // инициализация
-//  oled.clear();       // очистка
-//  oled.setScale(3);   // масштаб текста (1..4)
-//  oled.home();        // курсор в 0,0
-  //oled.print(200);
-  Serial.begin(115200);
+  //set_velocity(0.5, 0.0);
 }
 
-#define PT(x) Serial.print(x); Serial.print('\t')
-
 void loop() {
-  static unsigned long freq = millis();
+  static uint32_t t = millis();
+  
   command_spin();
   
-  if (millis() - freq >= 1000 * DT) {
-    freq = millis();
-    left_regulator.update(); //Не трогать.
-    right_regulator.update(); //Не трогать.
-
-    //Вывод для отладки в формате: реальная_скорость_левого_мотора установочная_скорость_левого_мотора    реальная_скорость_правого_мотора установочная_скорость_правого_мотора
-//    PT(left_regulator.encoder.speed); //Отправка реальной скорости левого мотора
-//    PT(left_regulator.encoder.ticks); //Отправка установочной скорости левого мотора
-//    Serial.print("\t");
-//    PT(right_regulator.encoder.speed); //Отправка реальной скорости левого мотора
-//    PT(right_regulator.encoder.ticks); //Отправка установочной скорости левого мотора
-//    Serial.println();
+  if(millis() - t >= 10) { // DT = 0.01 сек
+    t = millis();
+    left_regulator.update();
+    right_regulator.update();
   }
   
 }

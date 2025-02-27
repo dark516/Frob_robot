@@ -1,98 +1,98 @@
 #pragma once
-
-#define DT 0.01
-#define MAX_DELTA 10 //Максимальная фактическая скорость
-
+#include "robot_params.h"
 struct PID {
   float kp, ki, kd, max_i;
   float integral = 0;
-  int old_error = 0;
+  float prev_error = 0;
 
-  PID (float p, float i, float d, float mi) : kp(p), ki(i), kd(d), max_i(mi) {}
-  
-  int calc(int error) {
+  PID(float p, float i, float d, float mi) 
+    : kp(p), ki(i), kd(d), max_i(mi) {}
+
+  int calc(float error) {
     integral += error * DT * ki;
     integral = constrain(integral, -max_i, max_i);
-    float diff = (error - old_error) * kd / DT;
-    old_error = error;
-    return error * kp + integral + diff;
+    float diff = (error - prev_error) * kd / DT;
+    prev_error = error;
+    return static_cast<int>(error * kp + integral + diff);
   }
 };
 
 struct Encoder {
+  volatile long ticks = 0;
+  long prev_ticks = 0;
   int speed = 0;
-  volatile long ticks = 0, prev_ticks = 0;
   byte pin_a, pin_b;
   bool invert;
-  Encoder (byte pin_enc_a, byte pin_enc_b, void(*on_enc)(void), bool inverted) : pin_a(pin_enc_a), pin_b(pin_enc_b), invert(inverted){
+
+  Encoder(byte a, byte b, void(*isr)(), bool inv) 
+    : pin_a(a), pin_b(b), invert(inv) {
     pinMode(pin_a, INPUT);
     pinMode(pin_b, INPUT);
-    attachInterrupt(digitalPinToInterrupt(pin_a), on_enc, RISING);
+    attachInterrupt(digitalPinToInterrupt(pin_a), isr, RISING);
   }
 
   void encoder_int() {
-    int step = 1;
-    if (invert) step*=-1;
-    if (digitalRead(pin_b)) ticks+=step;
-    else ticks-=step;
+    int dir = (digitalRead(pin_b) ^ invert) ? 1 : -1;
+    ticks += dir;
   }
 
-  int calc_delta() {
+  void calc_delta() {
+    noInterrupts();
     speed = ticks - prev_ticks;
-    prev_ticks = ticks; 
+    prev_ticks = ticks;
+    interrupts();
   }
-  
 };
 
 struct Motor {
-  byte dir, speed;
+  byte pin_dir, pin_pwm;
   
-  Motor (byte pin_dir, byte pin_speed) : dir(pin_dir), speed(pin_speed) {
-    pinMode(dir, OUTPUT);
-    pinMode(speed, OUTPUT);
+  Motor(byte dir, byte pwm) : pin_dir(dir), pin_pwm(pwm) {
+    pinMode(pin_dir, OUTPUT);
+    pinMode(pin_pwm, OUTPUT);
   }
 
-  void set_pwmdir(int pwm_dir) {
-    int pwm = constrain(abs(pwm_dir), 0, 255);
-    analogWrite(speed, pwm);
-    digitalWrite(dir, pwm_dir > 0);
+  void set_pwmdir(int speed) {
+    speed = constrain(speed, -255, 255);
+    digitalWrite(pin_dir, speed > 0);
+    analogWrite(pin_pwm, abs(speed));
   }
 };
 
-struct Regulator { 
+struct Regulator {
+  Motor& motor;
+  Encoder& encoder;
+  PID& pid;
+  float target_speed = 0;
+  float current_speed = 0;
+  double position_target = 0;
+  float max_accel;
+  Regulator(Motor& m, Encoder& e, PID& p)
+    : motor(m), encoder(e), pid(p) {max_accel = MAX_LIN_ACCEL * TICKS_PER_METER;}
 
-  Motor motor;
-  Encoder encoder;
-  PID pid;
-
-  long next = 0;
-  int delta = 0;
-  
-  
-  Regulator (Motor&& motor, Encoder&& encoder, PID&& pid) : motor(motor), encoder(encoder), pid(pid) {}
+  void set_speed(float new_speed) {
+    target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
+  }
 
   void update() {
-    if (delta == 0){
-      motor.set_pwmdir(0);
-      next = encoder.ticks;
-    }else {
-      next += delta;
-      motor.set_pwmdir(pid.calc(next - encoder.ticks));
-      // проверить нужно ли это тут
-      encoder.calc_delta();
+    // Плавное изменение скорости
+    float speed_diff = target_speed - current_speed;
+    float allowed_diff = copysignf(max_accel * DT, speed_diff);
+    
+    if(fabs(speed_diff) > fabs(allowed_diff)) {
+      current_speed += allowed_diff;
+    } else {
+      current_speed = target_speed;
     }
-
-  }
-  void set_delta(int new_delta) {
-    delta = constrain(new_delta, -MAX_DELTA, MAX_DELTA);
-    if(new_delta == 0) {
-      next = encoder.ticks;
-      delta = 0;
-//      for (int i=0, s=255; i < 15; i++, s=-s){
-//        motor.set_pwmdir(s);
-//        delay(5);
-//      }
-      motor.set_pwmdir(0);
-    }
+    
+    // Обновление целевой позиции
+    position_target += current_speed * DT;
+    
+    // ПИД-регулятор
+    int error = position_target - encoder.ticks;//static_cast<int>(position_target - encoder.ticks);
+    int pwm = pid.calc(error);
+    motor.set_pwmdir(pwm);
+//    Serial.println(pwm);
+    encoder.calc_delta();
   }
 };
