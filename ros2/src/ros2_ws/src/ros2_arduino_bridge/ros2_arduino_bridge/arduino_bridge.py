@@ -111,7 +111,7 @@ class Arduino_bridge(Node):
             self.right_delta_pub.publish(Int32(data=arduino_data.right_delta))
             self.left_speed_pub.publish(Float32(data=arduino_data.left_speed))
             self.right_speed_pub.publish(Float32(data=arduino_data.right_speed))
-            print(f'left_delta {arduino_data.left_delta} right_delta {arduino_data.right_delta} left_speed {arduino_data.left_speed} left_speed {arduino_data.right_speed}')
+            #print(f'left_delta {arduino_data.left_delta} right_delta {arduino_data.right_delta} left_speed {arduino_data.left_speed} left_speed {arduino_data.right_speed}')
         except SerialException as e:
             self._handle_disconnection()
 
