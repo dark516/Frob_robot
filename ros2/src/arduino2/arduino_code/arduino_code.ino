@@ -27,7 +27,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
-  //set_velocity(0.5, 0.0);
+  set_velocity(0.0, 0.0);
 }
 
 void loop() {

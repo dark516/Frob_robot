@@ -7,64 +7,46 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    # Путь к пакету с описанием робота
-    pkg_path = get_package_share_directory('description')
-    urdf_path = os.path.join(pkg_path, 'urdf', 'robot.urdf')
-
-    # Аргумент для задания порта Arduino
-    arduino_port_arg = DeclareLaunchArgument(
-        'arduino_port',
-        default_value='/dev/ttyUSB1',
-        description='Порт, к которому подключен Arduino'
-    )
-
-    # Узел robot_state_publisher
-    robot_pub = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_pub',
-        output='screen',
-        parameters=[{'robot_description': open(urdf_path).read()}]
-    )
-
-    # Узел joint_state_publisher
-    joint_pub = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_pub',
-        output='screen'
-    )
-
     # Узел ros2_arduino_bridge
     arduino_bridge = Node(
         package='ros2_arduino_bridge',
         executable='arduino_bridge',
         name='arduino_bridge',
-        output='screen',
-        arguments=[LaunchConfiguration('arduino_port')]
-    )
-
-    # Узел odometry_publisher
-    odometry_publisher = Node(
-        package='frob_odometry',
-        executable='odometry_publisher',
-        name='odometry_publisher',
         output='screen'
     )
 
-    # Включение launch файла YDLIDAR
+    #Lidar YDLIDAR X4
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')
         )
     )
 
-    return LaunchDescription([
-        arduino_port_arg,
-        robot_pub,
-        joint_pub,
-        arduino_bridge,
-        odometry_publisher,
-        lidar_launch
-    ])
+    #Imu mpu6050
+    imu_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('ros2_mpu6050'), 'launch', 'ros2_mpu6050.launch.py')
+        )
+    )
 
+    #Description
+    description_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('frob_description'), 'launch', 'description.launch.py')
+        )
+    )
+
+    #Odometry
+    odometry_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(get_package_share_directory('frob_odometry'), 'launch', 'odometry.launch.py')
+        )
+    )
+
+    return LaunchDescription([
+        arduino_bridge,
+        lidar_launch,
+        imu_launch,
+        description_launch,
+        odometry_launch
+    ])

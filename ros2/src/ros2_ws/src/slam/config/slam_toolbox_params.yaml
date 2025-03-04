@@ -5,6 +5,7 @@ slam_toolbox:
     map_frame: map
     base_frame: base_footprint
     scan_topic: /scan
+    odom_topic: /odometry/filtered
     use_map_saver: true
     mode: mapping #localization
     use_sim_time: true

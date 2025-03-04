@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 #include "motor_regulator.h"
 extern Regulator left_regulator;
 extern Regulator right_regulator;
@@ -21,14 +21,6 @@ void set_velocity(float linear, float angular) {
 
   left_regulator.set_speed(left_speed);
   right_regulator.set_speed(right_speed);
-
-  // Если скорости нулевые, сбрасываем таймеры
-  if (linear == 0 && angular == 0) {
-    left_regulator.zero_speed_time = 0;
-    right_regulator.zero_speed_time = 0;
-    left_regulator.is_stopped = false;
-    right_regulator.is_stopped = false;
-  }
 }
 
 struct EncoderData {

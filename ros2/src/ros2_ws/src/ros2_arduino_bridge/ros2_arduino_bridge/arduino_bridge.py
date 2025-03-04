@@ -191,21 +191,30 @@ def main(args=None):
     arduino_bridge = None
 
     try:
-        port = sys.argv[1] if len(sys.argv) > 1 else None
+        # Используем argparse для обработки аргументов
+        import argparse
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--port', type=str, help='Serial port for Arduino', default=None)
+        args, unknown = parser.parse_known_args()
+
+        # Получаем порт из аргументов
+        port = args.port
         ports = find_arduino_ports()
 
         if port:
             if port not in ports:
                 print(f"\033[1;31mPort {port} not found!\033[0m")
                 return
-            ports = [port]
+            ports = [port]  # Если порт указан, проверяем только его
+        else:
+            print("\033[36mNo port specified, searching for Arduino devices...\033[0m")
 
         for p in ports:
             try:
                 print(f"\033[36mConnecting to {p}...\033[0m")
                 connection = ArduinoConnection(Serial(p, 115200))
                 sleep(2)
-                
+
                 if connection.is_arduino():
                     arduino_bridge = Arduino_bridge(connection)
                     print(f"\033[1;32mSuccessfully connected to Arduino at {p}\033[0m")
@@ -213,7 +222,7 @@ def main(args=None):
                 else:
                     print(f"\033[33mDevice at {p} is not responding as Arduino\033[0m")
                     connection.close()
-                    
+
             except Exception as e:
                 print(f"\033[33mConnection to {p} failed: {str(e)}\033[0m")
                 continue
@@ -223,7 +232,7 @@ def main(args=None):
 
         executor = rclpy.executors.SingleThreadedExecutor()
         executor.add_node(arduino_bridge)
-        
+
         try:
             executor.spin()
         except KeyboardInterrupt:
