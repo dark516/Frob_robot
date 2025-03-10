@@ -1,0 +1,80 @@
+ekf_filter_node:
+  ros__parameters:
+    # Общие параметры
+    frequency: 45.0  # Частота обновления фильтра (Гц)
+    sensor_timeout: 0.2  # Таймаут для сенсоров (сек)
+    two_d_mode: true  # 2D режим (если робот движется только в плоскости)
+    publish_tf: true  # Публиковать преобразование (tf)
+    map_frame: "map"
+    odom_frame: "odom"
+    base_link_frame: "base_footprint"
+    world_frame: "odom"  # Мировая система координат (обычно совпадает с odom)
+
+    # Источники данных
+    odom0: "/odom"  # Топик одометрии от энкодеров
+    odom0_config: [true, false, false,  # X, Y, Z
+                   false, false, true,  # Roll, Pitch, Yaw
+                   false, false, false,  # Vx, Vy, Vz
+                   false, false, false,  # Vroll, Vpitch, Vyaw
+                   false, false, false]  # Ax, Ay, Az
+    odom0_differential: false  # Дифференциальный режим для одометрии
+
+    imu0: "/imu/mpu6050"  # Топик данных IMU (MPU6050)
+    imu0_config: [false, false, false,  # X, Y, Z
+                  true, true, true,  # Roll, Pitch, Yaw
+                  false, false, false,  # Vx, Vy, Vz
+                  true, true, true,  # Vroll, Vpitch, Vyaw
+                  false, false, false]  # Ax, Ay, Az
+    imu0_differential: false  # Дифференциальный режим для IMU
+    
+    # Шумы и ковариации
+    odom0_pose_rejection_threshold: 10.0
+    odom0_twist_rejection_threshold: 5.0
+    imu0_pose_rejection_threshold: 10.0
+    imu0_twist_rejection_threshold: 5.0
+
+    odom0_pose_noise:
+      x: 0.05   # Шум по X (м)
+      y: 0.05   # Шум по Y (м)
+      z: 0.05   # Шум по Z (м)
+      roll: 0.05  # Шум по Roll (рад)
+      pitch: 0.05 # Шум по Pitch (рад)
+      yaw: 0.05   # Шум по Yaw (рад)
+    odom0_twist_noise:
+      x: 0.05   # Шум по линейной скорости X (м/с)
+      y: 0.05   # Шум по линейной скорости Y (м/с)
+      z: 0.05   # Шум по линейной скорости Z (м/с)
+      roll: 0.05  # Шум по угловой скорости Roll (рад/с)
+      pitch: 0.05 # Шум по угловой скорости Pitch (рад/с)
+      yaw: 0.05   # Шум по угловой скорости Yaw (рад/с)
+
+    # Шумы для IMU
+    imu0_pose_noise:
+      roll: 0.01  # Шум по Roll (рад)
+      pitch: 0.01 # Шум по Pitch (рад)
+      yaw: 0.01   # Шум по Yaw (рад)
+    imu0_twist_noise:
+      x: 0.01   # Шум по угловой скорости X (рад/с)
+      y: 0.01   # Шум по угловой скорости Y (рад/с)
+      z: 0.01   # Шум по угловой скорости Z (рад/с)
+
+    # Ограничения скорости и ускорения
+    velocity_limits:
+      linear:
+        x: 0.486  # Максимальная скорость по X (м/с)
+        y: 0.0   # Максимальная скорость по Y (если робот не движется боком)
+        z: 0.0   # Максимальная скорость по Z (если робот не летает)
+      angular:
+        x: 0.0   # Максимальная угловая скорость по оси X (рад/с)
+        y: 0.0   # Максимальная угловая скорость по оси Y (рад/с)
+        z: 5.4   # Максимальная угловая скорость по оси Z (рад/с, например, для поворотов)
+    
+    acceleration_limits:
+      linear:
+        x: 0.5   # Максимальное ускорение по X (м/с²)
+        y: 0.0   # Максимальное ускорение по Y
+        z: 0.0   # Максимальное ускорение по Z
+      angular:
+        x: 0.0   # Максимальное угловое ускорение по оси X (рад/с²)
+        y: 0.0   # Максимальное угловое ускорение по оси Y (рад/с²)
+        z: 5.4   # Максимальное угловое ускорение по оси Z (рад/с²)

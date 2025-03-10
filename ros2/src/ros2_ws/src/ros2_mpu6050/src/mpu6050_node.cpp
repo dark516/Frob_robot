@@ -44,7 +44,7 @@ void Mpu6050Node::ImuPubCallback()
 {
     auto message = sensor_msgs::msg::Imu();
     message.header.stamp = this->get_clock()->now();
-    message.header.frame_id = "base_link";
+    message.header.frame_id = "base_footprint";
     message.linear_acceleration_covariance = {0};
 
     /* Read IMU data */

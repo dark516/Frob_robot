@@ -19,7 +19,6 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-             'keyboard_teleop = frob_bringup.cmd_vel_teleop:main',
         ],
     },
 )
