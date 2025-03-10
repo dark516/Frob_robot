@@ -1,0 +1,14 @@
+joy_control:  # Пространство имен должно совпадать с именем ноды!
+  ros__parameters:
+    max_linear_speed: 0.5
+    max_angular_speed: 1.0
+    step_linear: 0.1
+    step_angular: 0.1
+    axis_linear: 1
+    axis_angular: 3
+    button_linear_up: 4
+    button_linear_down: 6
+    button_angular_up: 5
+    button_angular_down: 7
+    deadzone: 0.1
+    frequency: 9.0

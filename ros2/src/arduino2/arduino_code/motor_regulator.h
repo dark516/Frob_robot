@@ -59,6 +59,74 @@ struct Motor {
   }
 };
 
+//struct Regulator {
+//  Motor& motor;
+//  Encoder& encoder;
+//  PID& pid;
+//  
+//  float target_speed = 0;
+//  float current_speed = 0;
+//  double position_target = 0;
+//  float max_accel;
+//  
+//  // Добавляем переменные для управления таймером
+//  unsigned long last_nonzero_speed_time = 0;
+//  bool is_position_reset = false;
+//
+//  Regulator(Motor& m, Encoder& e, PID& p)
+//    : motor(m), encoder(e), pid(p) {
+//    max_accel = MAX_LIN_ACCEL * TICKS_PER_METER;
+//  }
+//
+//  void set_speed(float new_speed) {
+//    target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
+//    
+//    // Сбрасываем таймер при получении любой новой скорости
+//    if (target_speed != 0) {
+//      last_nonzero_speed_time = millis();
+//      is_position_reset = false;
+//    }
+//  }
+//
+//  void update() {
+//    // Плавное изменение скорости
+//    float speed_diff = target_speed - current_speed;
+//    float allowed_diff = copysignf(max_accel * DT, speed_diff);
+//    
+//    if (fabs(speed_diff) > fabs(allowed_diff)) {
+//      current_speed += allowed_diff;
+//    } else {
+//      current_speed = target_speed;
+//    }
+//
+//    // Обновление целевой позиции
+//    position_target += current_speed * DT;
+//
+//    // Если скорость нулевая более 1 секунды - синхронизируем позицию
+//    if (target_speed == 0 && current_speed == 0) {
+//      if (!is_position_reset) {
+//        if (millis() - last_nonzero_speed_time > 1000) {
+//          position_target = encoder.ticks;
+//          is_position_reset = true;
+//        }
+//      }
+//    }
+//
+//    // ПИД-регулятор
+//    int error = position_target - encoder.ticks;
+//    int pwm = pid.calc(error);
+//    
+//    // Если позиция синхронизирована - отключаем мотор
+//    if (is_position_reset) {
+//      pwm = 0;
+//    }
+//    
+//    motor.set_pwmdir(pwm);
+//    encoder.calc_delta();
+//  }
+//};
+
+
 struct Regulator {
   Motor& motor;
   Encoder& encoder;
@@ -69,23 +137,24 @@ struct Regulator {
   double position_target = 0;
   float max_accel;
   
-  // Добавляем переменные для управления таймером
   unsigned long last_nonzero_speed_time = 0;
   bool is_position_reset = false;
-
   Regulator(Motor& m, Encoder& e, PID& p)
     : motor(m), encoder(e), pid(p) {
     max_accel = MAX_LIN_ACCEL * TICKS_PER_METER;
   }
 
   void set_speed(float new_speed) {
-    target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
-    
-    // Сбрасываем таймер при получении любой новой скорости
+    // Если направление изменилось, сбрасываем целевую позицию и интегральную ошибку
+    if ((target_speed > 0 && new_speed < 0) || (target_speed < 0 && new_speed > 0)) {
+      position_target = encoder.ticks;
+      pid.integral = 0; // Сбрасываем интегральную ошибку
+    }
     if (target_speed != 0) {
       last_nonzero_speed_time = millis();
       is_position_reset = false;
     }
+    target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
   }
 
   void update() {
@@ -98,11 +167,10 @@ struct Regulator {
     } else {
       current_speed = target_speed;
     }
-
+    
     // Обновление целевой позиции
     position_target += current_speed * DT;
-
-    // Если скорость нулевая более 1 секунды - синхронизируем позицию
+    //    // Если скорость нулевая более 1 секунды - синхронизируем позицию
     if (target_speed == 0 && current_speed == 0) {
       if (!is_position_reset) {
         if (millis() - last_nonzero_speed_time > 1000) {
@@ -111,16 +179,13 @@ struct Regulator {
         }
       }
     }
-
     // ПИД-регулятор
     int error = position_target - encoder.ticks;
     int pwm = pid.calc(error);
-    
-    // Если позиция синхронизирована - отключаем мотор
+
     if (is_position_reset) {
-      pwm = 0;
+        pwm = 0;
     }
-    
     motor.set_pwmdir(pwm);
     encoder.calc_delta();
   }
