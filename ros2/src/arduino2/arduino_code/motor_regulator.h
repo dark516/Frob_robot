@@ -59,72 +59,6 @@ struct Motor {
   }
 };
 
-
-
-//struct Regulator {
-//  Motor& motor;
-//  Encoder& encoder;
-//  PID& pid;
-//  
-//  float target_speed = 0;
-//  float current_speed = 0;
-//  double position_target = 0;
-//  float max_accel;
-//  
-//  unsigned long last_nonzero_speed_time = 0;
-//  bool is_position_reset = false;
-//  Regulator(Motor& m, Encoder& e, PID& p)
-//    : motor(m), encoder(e), pid(p) {
-//    max_accel = MAX_LIN_ACCEL * TICKS_PER_METER;
-//  }
-//
-//  void set_speed(float new_speed) {
-//    // Если направление изменилось, сбрасываем целевую позицию и интегральную ошибку
-//    if ((target_speed > 0 && new_speed < 0) || (target_speed < 0 && new_speed > 0)) {
-//      position_target = encoder.ticks;
-//      pid.integral = 0; // Сбрасываем интегральную ошибку
-//    }
-//    if (target_speed != 0) {
-//      last_nonzero_speed_time = millis();
-//      is_position_reset = false;
-//    }
-//    target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
-//  }
-//
-//  void update() {
-//    // Плавное изменение скорости
-//    float speed_diff = target_speed - current_speed;
-//    float allowed_diff = copysignf(max_accel * DT, speed_diff);
-//    
-//    if (fabs(speed_diff) > fabs(allowed_diff)) {
-//      current_speed += allowed_diff;
-//    } else {
-//      current_speed = target_speed;
-//    }
-//    
-//    // Обновление целевой позиции
-//    position_target += current_speed * DT;
-//    //    // Если скорость нулевая более 1 секунды - синхронизируем позицию
-//    if (target_speed == 0 && current_speed == 0) {
-//      if (!is_position_reset) {
-//        if (millis() - last_nonzero_speed_time > 1000) {
-//          position_target = encoder.ticks;
-//          is_position_reset = true;
-//        }
-//      }
-//    }
-//    // ПИД-регулятор
-//    int error = position_target - encoder.ticks;
-//    int pwm = pid.calc(error);
-//
-//    if (is_position_reset) {
-//        pwm = 0;
-//    }
-//    motor.set_pwmdir(pwm);
-//    encoder.calc_delta();
-//  }
-//};
-
 struct Regulator {
   Motor& motor;
   Encoder& encoder;
@@ -135,15 +69,31 @@ struct Regulator {
   double position_target = 0;
   float max_accel;
   
+  // Добавляем таймер для плавного останова
+  unsigned long last_nonzero_time = 0;
+  bool position_reset = false;
+
   Regulator(Motor& m, Encoder& e, PID& p)
     : motor(m), encoder(e), pid(p) {
     max_accel = MAX_LIN_ACCEL * TICKS_PER_METER;
   }
 
   void set_speed(float new_speed) {
-    // Если новая скорость НЕ нулевая, а предыдущая была нулевая — синхронизируем позицию
+    // При изменении направления сбрасываем ошибки
+    if ((target_speed > 0 && new_speed < 0) || (target_speed < 0 && new_speed > 0)) {
+      position_target = encoder.ticks;
+      pid.integral = 0;
+    }
+    
+    // При начале движения синхронизируем позицию
     if (target_speed == 0 && new_speed != 0) {
       position_target = encoder.ticks;
+      position_reset = false;
+    }
+    
+    // Обновляем таймер последней активности
+    if (new_speed != 0) {
+      last_nonzero_time = millis();
     }
     
     target_speed = constrain(new_speed, -MAX_DELTA_TICKS, MAX_DELTA_TICKS);
@@ -154,22 +104,28 @@ struct Regulator {
     float speed_diff = target_speed - current_speed;
     float allowed_diff = copysignf(max_accel * DT, speed_diff);
     
-    if (fabs(speed_diff) > fabs(allowed_diff)) {
-      current_speed += allowed_diff;
-    } else {
-      current_speed = target_speed;
-    }
+    current_speed += (fabs(speed_diff) > fabs(allowed_diff)) ? allowed_diff : speed_diff;
     
-    // Если текущая скорость нулевая — синхронизируем позицию
+    // Автоматическая синхронизация позиции при остановке
     if (current_speed == 0) {
       position_target = encoder.ticks;
-    } else {
+    } 
+    else {
       position_target += current_speed * DT;
     }
     
-    // ПИД-регулятор
+    // Полный сброс через 1 секунду простоя
+    if (target_speed == 0 && current_speed == 0) {
+      if (millis() - last_nonzero_time > 1000 && !position_reset) {
+        position_target = encoder.ticks;
+        pid.integral = 0;
+        position_reset = true;
+      }
+    }
+    
+    // Расчет PWM
     int error = position_target - encoder.ticks;
-    int pwm = pid.calc(error);
+    int pwm = position_reset ? 0 : pid.calc(error);
     motor.set_pwmdir(pwm);
     
     encoder.calc_delta();
