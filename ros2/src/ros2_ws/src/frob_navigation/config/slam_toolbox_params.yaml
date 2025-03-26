@@ -1,0 +1,10 @@
+/pc_slam:
+  ros__parameters:
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_footprint
+    scan_topic: /scan/filtered
+    odom_topic: /odometry/filtered
+    use_map_saver: true
+    mode: mapping
+    use_sim_time: true

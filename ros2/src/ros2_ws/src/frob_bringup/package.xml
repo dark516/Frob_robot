@@ -17,7 +17,7 @@
   <depend>ros2_arduino_bridge</depend>
   <depend>robot_state_publisher</depend>
   <depend>joint_state_publisher</depend>
-  <depend>ydlidar_ros2_driver</depend>
+  <depend>sllidar_ros2</depend>
   <export>
     <build_type>ament_python</build_type>
   </export>

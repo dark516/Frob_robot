@@ -12,13 +12,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Your Name',
-    maintainer_email='your_email@example.com',
-    description='Launch package for bringing up the robot',
+    maintainer='Alex Kulagin',
+    maintainer_email='sashakulagin2007@gmail.com',
+    description='Launch package for bringing up the frob robot',
     license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+             'keyboard_teleop = frob_bringup.cmd_vel_teleop:main',
         ],
     },
 )

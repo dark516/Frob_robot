@@ -14,14 +14,18 @@ def generate_launch_description():
         name='arduino_bridge',
         output='screen'
     )
-
     #Lidar YDLIDAR X4
     lidar_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('ydlidar_ros2_driver'), 'launch', 'ydlidar_launch.py')
+            os.path.join(get_package_share_directory('sllidar_ros2'), 'launch', 'sllidar_c1_launch.py')
         )
     )
-
+    lidar_filter = Node(
+        package='lidar_filter',
+        executable='lidar_filter_node',
+        name='lidar_filter',
+        output='screen'
+    )
     #Imu mpu6050
     imu_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -48,5 +52,6 @@ def generate_launch_description():
         lidar_launch,
         imu_launch,
         description_launch,
-        odometry_launch
+        odometry_launch,
+        lidar_filter
     ])
