@@ -21,7 +21,9 @@ setup(
     maintainer_email='sashakulagin2007@gmail.com',
     description='simple ros2 node to control robot',
     license='Apache2',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'joy_control = frob_control.joy_control:main',

@@ -21,7 +21,9 @@ setup(
     maintainer_email='sashakulagin@gmail.com',
     description='robot description',
     license='Apache2',
-    tests_require=['pytest'],
+    extras_require={
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': []
     },
