@@ -1,3 +1,6 @@
 [submodule "models"]
 	path = models
 	url = https://github.com/dark516/Frob-models.git
+[submodule "web_interface"]
+	path = web_interface
+	url = https://github.com/dark516/Frob-interface.git
