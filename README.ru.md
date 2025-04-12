@@ -52,7 +52,7 @@ bash ./installation/install_jazzy_base.sh
 Если вы предпочитаете установить ROS2 вручную, пожалуйста, ознакомьтесь с официальным руководством по установке ROS2 [здесь](https://docs.ros.org/en/jazzy/Installation.html). В этом руководстве приведены пошаговые инструкции по настройке ROS2 Jazzy на различных платформах.
 
 ## Изготовление и сборка
-- [Инструкция по сборке] (https://github.com/mi1en/Frob_robot/blob/patch-2/assembly_guide/assembly.pdf)
+- ![Инструкция по сборке](https://github.com/mi1en/Frob_robot/blob/patch-2/assembly_guide/assembly.pdf)
 - Смета
 <!-- Предоставьте подробные инструкции по изготовлению и сборке робота. -->
 <!-- Включите информацию о 3D-печати, необходимых материалах и пошаговом руководстве по сборке. -->
