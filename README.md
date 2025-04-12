@@ -59,7 +59,7 @@ bash ./installation/install_jazzy_base.sh
 ![image3](https://github.com/dark516/Frob_robot/blob/main/images/assembly_images/Assembly_3page.png)
 ![image4](https://github.com/dark516/Frob_robot/blob/main/images/assembly_images/Assembly_4page.png)
 ![image5](https://github.com/dark516/Frob_robot/blob/main/images/assembly_images/Assembly_5page.png)
-- Смета
+- [Смета](https://github.com/dark516/Frob_robot/blob/main/assembly_guide/FROB_parts_and_prices.xlsx)
 <!-- Предоставьте подробные инструкции по изготовлению и сборке робота. -->
 <!-- Включите информацию о 3D-печати, необходимых материалах и пошаговом руководстве по сборке. -->
 ## Основное использование
