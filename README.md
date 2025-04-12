@@ -54,6 +54,7 @@ bash ./installation/install_jazzy_base.sh
 
 ## Изготовление и сборка
 - [Инструкция по сборке](https://github.com/mi1en/Frob_robot/blob/patch-2/assembly_guide/assembly.pdf)
+![image1](https://github.com/dark516/Frob_robot/blob/main/images/assembly_images/Assembly_1page.png)
 - Смета
 <!-- Предоставьте подробные инструкции по изготовлению и сборке робота. -->
 <!-- Включите информацию о 3D-печати, необходимых материалах и пошаговом руководстве по сборке. -->
