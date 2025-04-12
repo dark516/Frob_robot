@@ -2,7 +2,8 @@
 
 # Роботизированная платформа Frob
 
-![Логотип Frob](https://via.placeholder.com/150)
+![Логотип Frob](https://github.com/user-attachments/assets/4e6b15c5-6662-47f5-8419-bada88828910)
+
 
 [English documentation](./README.md)
 
