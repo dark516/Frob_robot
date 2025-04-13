@@ -13,3 +13,4 @@
 
 
 [Документация проекта](./MANUAL.md)
+[English documentation](./MANUAL.eng.md)
