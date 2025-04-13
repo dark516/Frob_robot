@@ -44,7 +44,7 @@ bash ./installation/install_jazzy_base.sh
 Дополнительно, вам так же будет необходимо самостоятельно произвести:
 * [Корпус робота](https://github.com/dark516/Frob-models/tree/0011c5d25b88403aa1976e53d2cd7adcf6bf47ee/make_robot/for_3d_print)
 * [Верхнюю платформу](https://github.com/dark516/Frob-models/tree/0011c5d25b88403aa1976e53d2cd7adcf6bf47ee/make_robot/for_laser_cutting)
-* [Плату питания и котроллер моторов](https://github.com/dark516/Frob-models/tree/0011c5d25b88403aa1976e53d2cd7adcf6bf47ee/make_robot/pcb)
+* [Плату питания](https://github.com/dark516/Frob-models/tree/0011c5d25b88403aa1976e53d2cd7adcf6bf47ee/make_robot/pcb)
 ### 2. Сборка платформы
 После приобретения всех деталей, вы можете приступить к сборке. Для этого следуйте специальной [пошаговой инструкцие](https://github.com/mi1en/Frob_robot/blob/patch-2/assembly_guide/assembly.pdf).
 <!-- Предоставьте подробные инструкции по изготовлению и сборке робота. -->
