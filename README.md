@@ -12,6 +12,7 @@
 [![Issues](https://img.shields.io/github/issues/dark516/Frob_robot?style=flat-square)](https://github.com/dark516/Frob_robot/issues)
 
 
+
 [Документация проекта](./MANUAL.md)
 
 [English documentation](./MANUAL.eng.md)
