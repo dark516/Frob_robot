@@ -2,7 +2,7 @@
 
 # Frob Robotic Platform
 
-![Frob Logo](https://via.placeholder.com/150)  <!-- Add logo -->
+![Frob Logo](https://github.com/user-attachments/assets/4e6b15c5-6662-47f5-8419-bada88828910)
 
 [Russian-language documentation](./README.ru.md)
 
